@@ -1,13 +1,13 @@
 # Army Moves MSX
 
-Remake of Army Moves MSX using C++ and [SFML](www.sfml-dev.org) library.
+Remake of Army Moves MSX using C++ and [SFML](https://www.sfml-dev.org/) library.
 
 ### Software used:
 
 * [Ubuntu 16.04](https://www.ubuntu.com/) (recommended)
 * [Code::Blocks](http://www.codeblocks.org/)
 * GNU GCC Compiler
-* [SFML 2.X](www.sfml-dev.org)
+* [SFML 2.X](https://www.sfml-dev.org/)
 
 ### Set up the project:
 

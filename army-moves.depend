@@ -1,0 +1,18 @@
+# depslib dependency file v1.0
+1550324902 source:/mnt/hgfs/FV/army-moves/main.cpp
+	<SFML/Graphics.hpp>
+	<iostream>
+
+1550429261 source:/mnt/hgfs/FV/army-moves/src/Game.cpp
+	<SFML/Graphics.hpp>
+	<iostream>
+	<math.h>
+	"../include/Game.h"
+
+1550429689 /mnt/hgfs/FV/army-moves/include/Game.h
+
+1550427721 source:/mnt/hgfs/FV/army-moves/src/main.cpp
+	<SFML/Graphics.hpp>
+	<iostream>
+	"../include/Game.h"
+

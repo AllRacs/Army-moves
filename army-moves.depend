@@ -50,3 +50,33 @@
 1552306169 /home/oscar/Desktop/FV/army-moves/include/Mapa.h
 	"SFML/Graphics.hpp"
 
+1554247618 source:/home/oscar/Desktop/FV/Army-moves/src/Game.cpp
+	<SFML/Graphics.hpp>
+	<iostream>
+	<math.h>
+	"../include/Game.h"
+
+1554247618 /home/oscar/Desktop/FV/Army-moves/include/Game.h
+	"Mapa.h"
+	"Jugador.h"
+
+1554247618 /home/oscar/Desktop/FV/Army-moves/include/Mapa.h
+	"SFML/Graphics.hpp"
+
+1554247618 /home/oscar/Desktop/FV/Army-moves/include/Jugador.h
+	"SFML/Graphics.hpp"
+
+1554247618 source:/home/oscar/Desktop/FV/Army-moves/src/main.cpp
+	<SFML/Graphics.hpp>
+	<iostream>
+	"../include/Game.h"
+
+1554247618 source:/home/oscar/Desktop/FV/Army-moves/src/Jugador.cpp
+	"Jugador.h"
+	"SFML/Graphics.hpp"
+	<iostream>
+
+1554247618 source:/home/oscar/Desktop/FV/Army-moves/src/Mapa.cpp
+	"Mapa.h"
+	<iostream>
+

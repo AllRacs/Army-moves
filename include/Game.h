@@ -1,5 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
+#include "Mapa.h"
+#include "Jugador.h"
 
 
 class Game
@@ -14,16 +16,15 @@ class Game
 
         sf::RenderWindow *wind;
         int fps;
-        sf::Texture *player;
-        sf::Sprite *player_s;
+        Jugador *jugador;
+        Mapa *mapa;
         sf::Clock clock;
 
         float scene_vel;
         int fuel, distance;
 
         void loop();
-        void control(sf::Clock c);
-        void jump();
+
 };
 
 #endif // GAME_H

@@ -1,6 +1,6 @@
 # Army Moves MSX
 
-Remake of Army Moves MSX using C++ and [SFML](https://www.sfml-dev.org/) library.
+Remake of Army Moves MSX (phase 1 & 2) using C++ and [SFML](https://www.sfml-dev.org/) library.
 
 ### Software used:
 

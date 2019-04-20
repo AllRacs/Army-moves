@@ -9,7 +9,7 @@ Remake of Army Moves MSX (phase 1 & 2) using C++ and [SFML](https://www.sfml-dev
 * GNU GCC Compiler
 * [SFML 2.X](https://www.sfml-dev.org/)
 
-### Set up the project:
+### Set up the enviroment:
 
 1. install **OpenGL**:
  ```

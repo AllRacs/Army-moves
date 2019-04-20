@@ -3,8 +3,9 @@
 Player::Player(int p)
 {
     //ctor
-    fuel = 0;
+    fuel = 5000;
     points = 0;
+    lives = 5;
 
     if(p==1)
     {
@@ -55,13 +56,13 @@ void Player::controlPlayer(std::vector<sf::Sprite*> m)
     {
         //collision->setScale(-0.2, 0.2);
         collision->move({-vel * time.asMilliseconds(), 0});
-        std::cout << collision->getPosition().x << " --- " << collision->getPosition().y << std::endl;
+        //std::cout << collision->getPosition().x << " --- " << collision->getPosition().y << std::endl;
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
         //collision->setScale(-0.2, 0.2);
         collision->move({vel * time.asMilliseconds(), 0});
-        std::cout << collision->getPosition().x << " +++ " << collision->getPosition().y << std::endl;
+        //std::cout << collision->getPosition().x << " +++ " << collision->getPosition().y << std::endl;
 
     }
     if(phase==1)
@@ -98,10 +99,15 @@ void Player::jump(std::vector<sf::Sprite*> m)
         }
     }
 
-    std::cout << "DOWN: " << down <<std::endl;
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+    std::cout << collision->getPosition().y << std::endl;
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && collision->getPosition().y<=558)
     {
         collision->move({0, -vel * time.asMilliseconds()});
+    }
+    else if(collision->getPosition().y >= 555)
+    {
+        collision->move({0, vel * time.asMilliseconds()});
     }
     else if(!collision->getGlobalBounds().intersects(m.at(down)->getGlobalBounds()))
     {
@@ -109,17 +115,54 @@ void Player::jump(std::vector<sf::Sprite*> m)
     }
 }
 
-bool Player::bulletCollision(std::vector<sf::Sprite*> bullets)
+void Player::reposition()
 {
-    bool res = false;
-    //for each bullet -> if intersects -> res = true
-    //...
-    return res;
+    //select best position to respawn
+    // sf::Vector2f v ...
+    sf::Vector2f v = {150.f,100.f};
+    collision->setPosition(v);
+    //animation->reposition(v);
+}
+
+void Player::recieveDamage()
+{
+    lives--;
+}
+
+void Player::updatePoints()
+{
+    if(cpoints.getElapsedTime().asSeconds() >= 1)
+    {
+        points += 100;
+        cpoints.restart();
+    }
+}
+
+void Player::updatePoints(int n)
+{
+    points += n;
+}
+
+void Player::updateFuel()
+{
+    if(cfuel.getElapsedTime().asSeconds() >= 0.2)
+    {
+        fuel -= 10;
+        cfuel.restart();
+    }
 }
 
 void Player::update(std::vector<sf::Sprite*> m)
 {
     controlPlayer(m);
+    updatePoints();
+    updateFuel();
+
+    if(collision->getPosition().y >= 680)
+    {
+        reposition();
+        recieveDamage();
+    }
 }
 
 void Player::draw(sf::RenderWindow& w)
@@ -136,4 +179,9 @@ int Player::getFuel()
 int Player::getPoints()
 {
     return points;
+}
+
+int Player::getLives()
+{
+    return lives;
 }

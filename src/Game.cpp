@@ -17,7 +17,7 @@ Game::Game()
     initGame(state);
 
 
-    hud = new HUD(*spritesheet, state);
+
 
 
     gameLoop();
@@ -43,6 +43,7 @@ Game::~Game()
 
 void Game::initGame(int s)
 {
+    hud = new HUD(*spritesheet, state);
     switch(s)
     {
         case 1:
@@ -105,11 +106,13 @@ void Game::switchState(int s)
         if(state==1)
         {
             delete map1;
+            delete hud;
             state = s;
         }
         else if(state==2)
         {
             delete map2;
+            delete hud;
             state = s;
         }
         //delete mapp;
@@ -135,16 +138,47 @@ void Game::switchState(int s)
     }
 }
 
+
+bool Game::bulletCollision()
+{
+    bool res = false;
+    //for each bullet -> if intersects -> res = true and lives-- and reposition
+    //...
+    return res;
+}
+
+bool Game::enemyCollision()
+{
+    bool res = false;
+    //check collision with every enemy
+    //if this->collision intersects whit any enemy lives-- and reposition
+    return res;
+}
+
+void Game::checkLives()
+{
+    if(player->getLives() == 0)
+    {
+        switchState(state);
+    }
+}
+
 void Game::gameLoop()
 {
     while(window->isOpen())
     {
+        checkLives();
+
         manageEvents();
 
         update();
 
         draw();
 
+        if(bulletCollision() || enemyCollision())
+        {
+            player->recieveDamage();
+        }
     }
 }
 
@@ -153,7 +187,7 @@ void Game::update()
     if(state == 1)
     {
         player->update(dynamic_cast<Map1*>(*mapp)->getBridges());
-        dynamic_cast<Map1*>(*mapp)->update();
+        dynamic_cast<Map1*>(*mapp)->update(player->getPoints());
     }
     else if(state == 2)
     {
@@ -161,7 +195,7 @@ void Game::update()
         dynamic_cast<Map2*>(*mapp)->update();
     }
 
-    hud->update(player->getFuel(), player->getPoints());
+    hud->update(player->getFuel(), player->getPoints(), player->getLives());
 
 
 }

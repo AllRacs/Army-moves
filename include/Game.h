@@ -36,12 +36,18 @@ class Game
         //HUD
         HUD *hud;
 
+        //game init and states
         void initGame(int);
         void initMap1();
         void initMap2();
         void initPlayer();
         void manageEvents();
         void switchState(int);
+
+        //player & enemy logic
+        bool bulletCollision();
+        bool enemyCollision();
+        void checkLives();
 };
 
 #endif // GAME_H

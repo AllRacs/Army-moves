@@ -18,11 +18,9 @@ class Map
         virtual void controlIA();
 
     protected:
-        std::vector<Enemy> enemies;
-        std::vector<Bullet> bullets;
+
 
     private:
-        int ifuel, ipoints;
 
 };
 

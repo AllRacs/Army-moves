@@ -10,8 +10,10 @@ class HUD
     public:
         HUD(sf::Texture&,int);
         virtual ~HUD();
-        void update(int,int);
+        void update(int,int,int);
         void draw(sf::RenderWindow&);
+        int getPoints();
+        int getFuel();
 
     protected:
 
@@ -22,13 +24,12 @@ class HUD
         sf::Font *pixelFont;
         sf::Text *points;
         sf::Text *fuel;
-        int ipoints, ifuel;
-
-        sf::Clock cfuel, cpoints, cpos;
+        sf::Text *lives;
+        int ipoints, ifuel, ilives;
 
         void updateFuel(int);
         void updatePoints(int);
-        void updatePos();
+        void updateLives(int);
 };
 
 #endif // HUD_H

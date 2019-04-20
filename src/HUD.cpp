@@ -26,7 +26,8 @@ HUD::HUD(sf::Texture& spritesheet, int p)
     }
 
     ipoints = 0;
-    ifuel = 5000;
+    ifuel = 0;
+    ilives = 0;
 
     points = new sf::Text;
     points->setFont(*pixelFont);
@@ -40,6 +41,12 @@ HUD::HUD(sf::Texture& spritesheet, int p)
     fuel->setString("FUEL");
     fuel->setCharacterSize(36);
 
+    lives = new sf::Text;
+    lives->setFont(*pixelFont);
+    lives->setPosition(62.f, 810.f);
+    lives->setString("LIVES");
+    lives->setCharacterSize(36);
+
     std::cout << "HUD created" << std::endl;
 }
 
@@ -52,26 +59,29 @@ HUD::~HUD()
     delete fuel;
 }
 
-void HUD::update(int f, int p)
+void HUD::update(int f, int p, int l)
 {
     updateFuel(f);
     updatePoints(p);
-    updatePos();
+    updateLives(l);
 }
 
 void HUD::updatePoints(int p)
 {
     ipoints = p;
+    points->setString(std::to_string(ipoints));
 }
 
 void HUD::updateFuel(int f)
 {
     ifuel = f;
+    fuel->setString(std::to_string(ifuel));
 }
 
-void HUD::updatePos()
+void HUD::updateLives(int l)
 {
-
+    ilives = l;
+    lives->setString(std::to_string(ilives));
 }
 
 void HUD::draw(sf::RenderWindow& w)
@@ -79,5 +89,16 @@ void HUD::draw(sf::RenderWindow& w)
     w.draw(layout);
     w.draw(*points);
     w.draw(*fuel);
+    w.draw(*lives);
     w.draw(*iconplayer);
+}
+
+int HUD::getPoints()
+{
+    return ipoints;
+}
+
+int HUD::getFuel()
+{
+    return ifuel;
 }

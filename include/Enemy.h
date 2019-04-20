@@ -4,15 +4,19 @@
 #include <stdlib.h>
 #include <iostream>
 
+#include "Animation.h"
+
 class Enemy
 {
     public:
-        Enemy();
+        Enemy(int);
         virtual ~Enemy();
+        void draw(sf::RenderWindow&);
 
     protected:
 
     private:
+        Animation *animation;
 };
 
 #endif // ENEMY_H

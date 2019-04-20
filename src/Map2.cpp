@@ -14,6 +14,23 @@ Map2::Map2(sf::Texture& spritesheetf)
 Map2::~Map2()
 {
     //dtor
+    while(floor.size() > 0)
+    {
+        delete floor.front();
+        floor.erase(floor.begin());
+    }
+
+    while(enemies.size() > 0)
+    {
+        delete enemies.front();
+        enemies.erase(enemies.begin());
+    }
+
+    while(bullets.size() > 0)
+    {
+        delete bullets.front();
+        bullets.erase(bullets.begin());
+    }
 }
 
 void Map2::update()
@@ -34,4 +51,14 @@ void Map2::controlIA()
 std::vector<sf::Sprite*> Map2::getFloor()
 {
     return floor;
+}
+
+std::vector<Enemy*> Map2::getEnemies()
+{
+    return enemies;
+}
+
+std::vector<Bullet*> Map2::getBullets()
+{
+    return bullets;
 }

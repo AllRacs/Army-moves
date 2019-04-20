@@ -13,13 +13,18 @@ class Player
     public:
         Player(int);
         virtual ~Player();
-        void update(std::vector<sf::Sprite*> m);
+        void update(std::vector<sf::Sprite*>);
         void draw(sf::RenderWindow&);
         void controlPlayer(std::vector<sf::Sprite*> m);
         void jump(std::vector<sf::Sprite*> m);
-        bool bulletCollision(std::vector<sf::Sprite*>);
+
         int getPoints();
         int getFuel();
+        int getLives();
+
+        void updatePoints(int);
+        void reposition();
+        void recieveDamage();
 
     protected:
 
@@ -27,7 +32,12 @@ class Player
         sf::Vector2f position;
         Animation *animation;
         sf::RectangleShape *collision;
-        int points, fuel;
+
+        int points, fuel, lives;
+        sf::Clock cpoints, cfuel, clives;
+        void updatePoints();
+        void updateFuel();
+
 
         int phase;
 

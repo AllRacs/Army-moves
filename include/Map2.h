@@ -13,9 +13,13 @@ class Map2 : public Map
         void draw(sf::RenderWindow&);
         void controlIA();
 
+        std::vector<sf::Sprite*> getFloor();
+
     protected:
 
     private:
+        std::vector<sf::Sprite*> floor;
+        sf::IntRect ss_Floor;
 };
 
 #endif // MAP2_H

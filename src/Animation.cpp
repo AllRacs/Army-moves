@@ -39,3 +39,8 @@ void Animation::draw(sf::RenderWindow& w)
 {
     w.draw(*sprite);
 }
+
+void Animation::die()
+{
+
+}

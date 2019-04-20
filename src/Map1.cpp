@@ -7,34 +7,20 @@ Map1::Map1(sf::Texture& spritesheet)
 
     enemies = std::vector<Enemy>{};
 
-    /*defBridges = new sf::Sprite[4];
-    for(int a = 0; a < 4; a++)
-    {
-        defBridges[a] = sf::Sprite(spritesheet);
-        switch(a)
-        {
-            case 0:
-                defBridges[a].setTextureRect(sf::IntRect(56,858,320,112));
-                break;
-            case 1:
-                defBridges[a].setTextureRect(sf::IntRect(56,858,320,112));
-                break;
-            case 2:
-                defBridges[a].setTextureRect(sf::IntRect(56,858,320,112));
-                break;
-            case 3:
-                defBridges[a].setTextureRect();
-                break;
-        }
-    }*/
-
     bridges = std::vector<sf::Sprite*>{};
+
+    ss_bridges[0] = sf::IntRect(56,858,320,112);
+    ss_bridges[1] = sf::IntRect(56,858,320,112);
+    ss_bridges[2] = sf::IntRect(56,858,320,112);
+    ss_bridges[3] = sf::IntRect(56,858,320,112);
+
 
     for(int a = 0; a < 3; a++)
     {
         //insert 3 new bridges sprites
-        bridges.push_back(new sf::Sprite());
-        bridges.at(bridges.size())->setTextureRect(sf::IntRect(56,858,320,112));
+        bridges.push_back(new sf::Sprite(spritesheet));
+        bridges.back()->setTextureRect(ss_bridges[a]);
+        bridges.back()->setPosition({100.f+400*a, 550.f});
     }
 
 }
@@ -72,8 +58,13 @@ void Map1::draw(sf::RenderWindow& w)
 {
     //draw bridges
     //...
+    for(int a = 0; a < bridges.size(); a++)
+    {
+        w.draw(*bridges.at(a));
+    }
     //draw enemies
     //...
+
 }
 
 std::vector<sf::Sprite*> Map1::getBridges()

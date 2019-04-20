@@ -19,7 +19,7 @@ class Map1 : public Map
 
     private:
         std::vector<sf::Sprite*> bridges;
-        sf::Sprite *defBridges;
+        sf::IntRect ss_bridges[4];
 };
 
 #endif // MAP1_H

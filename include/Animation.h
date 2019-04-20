@@ -11,6 +11,7 @@ class Animation
         virtual ~Animation();
         void update();
         void draw(sf::RenderWindow&);
+        void die();
 
     protected:
 

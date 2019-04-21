@@ -13,7 +13,7 @@ class Map1 : public Map
         void draw(sf::RenderWindow&);
         void controlIA();
         void controlBridges();
-        void newBridge();
+        void newBridge(bool);
         void newEnemy();
 
         std::vector<sf::Sprite*> getBridges();
@@ -26,6 +26,12 @@ class Map1 : public Map
         std::vector<sf::Sprite*> bridges;
         sf::IntRect ss_bridges[4];
         sf::Clock cbridges;
+
+        sf::Sprite *house;
+
+        sf::Texture *sp;
+
+        bool houseEnd;
 
         std::vector<Enemy*> enemies;
         std::vector<Bullet*> bullets;

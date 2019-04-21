@@ -4,6 +4,8 @@ Map1::Map1(sf::Texture& spritesheet)
 {
     //ctor
     std::cout << "Map 1 created" << std::endl;
+    sp = &spritesheet;
+    houseEnd = false;
 
     //SETTING ENEMIES
     enemies = std::vector<Enemy*>{};
@@ -36,7 +38,7 @@ Map1::Map1(sf::Texture& spritesheet)
             std::cout << "first bridge" << std::endl;
             bridges.back()->setPosition({100.f, 550.f});
         }
-        std::cout << bridges.at(a)->getPosition().x << " --- " << bridges.at(a)->getGlobalBounds().width << std::endl;
+        //std::cout << bridges.at(a)->getPosition().x << " --- " << bridges.at(a)->getGlobalBounds().width << std::endl;
     }
 
 }
@@ -61,15 +63,49 @@ Map1::~Map1()
         delete bullets.front();
         bullets.erase(bullets.begin());
     }
-
+    delete house;
 }
 
-void Map1::newBridge()
+void Map1::newBridge(bool fin)
 {
-    //delete head
-    //...
-    //push_back bridge sprite
-    //...
+    if(!fin)
+    {
+        delete bridges.front();
+        bridges.erase(bridges.begin());
+
+        srand(time(NULL));
+        int n = rand() % 3;
+
+        bridges.push_back(new sf::Sprite(*sp));
+        bridges.back()->setTextureRect(ss_bridges[n]);
+        if(bridges.size() > 1)
+        {
+            bridges.back()->setPosition({bridges.at(bridges.size()-2)->getPosition().x
+                                        + bridges.at(bridges.size()-2)->getGlobalBounds().width
+                                        + 150, 550.f});
+        }
+
+    }
+    else if(fin)
+    {
+        houseEnd = true;
+
+        bridges.push_back(new sf::Sprite(*sp));
+        bridges.back()->setTextureRect(ss_bridges[3]);
+        if(bridges.size() > 1)
+        {
+            bridges.back()->setPosition({bridges.at(bridges.size()-2)->getPosition().x
+                                        + bridges.at(bridges.size()-2)->getGlobalBounds().width
+                                        + 150, 550.f});
+        }
+
+        house = new sf::Sprite(*sp);
+        house->setTextureRect(sf::IntRect(1590,490,190,102));
+        house->setOrigin(190/2,102);
+        house->setPosition({bridges.at(bridges.size()-2)->getPosition().x
+                                        + bridges.at(bridges.size()-2)->getGlobalBounds().width
+                                        + 1200, 550.f});
+    }
 }
 
 void Map1::newEnemy()
@@ -79,8 +115,6 @@ void Map1::newEnemy()
 
 void Map1::controlIA()
 {
-    //move bridges
-    //...
     //move cars/heli
     //...
     //make jump (cars)
@@ -96,33 +130,41 @@ void Map1::controlBridges()
         bridges.at(a)->move({-0.2f * time.asMilliseconds(),0.f});
         cbridges.restart();
     }
+    if(houseEnd)
+    {
+        house->move({-0.2f * time.asMilliseconds(),0.f});
+    }
 }
 
-void Map1::update(int points)
+void Map1::update(int fuel)
 {
     controlIA();
     controlBridges();
-    if(bridges.front()->getPosition().x <= 20 && points <= 2000)
+    if(bridges.front()->getPosition().x + bridges.front()->getGlobalBounds().width <= 10 && fuel >= 4500)
     {
-        newBridge();
+        newBridge(false);
     }
+    else if(!houseEnd && fuel < 4500)
+    {
+        newBridge(true);
+    }
+    std::cout << bridges.size() << std::endl;
 }
 
 void Map1::draw(sf::RenderWindow& w)
 {
-    //draw bridges
-    //...
     for(int a = 0; a < bridges.size(); a++)
     {
         w.draw(*bridges.at(a));
     }
-    //draw enemies
-    //...
     for(int a = 0; a < enemies.size(); a++)
     {
         enemies.at(a)->draw(w);
     }
-
+    if(houseEnd)
+    {
+        w.draw(*house);
+    }
 }
 
 std::vector<sf::Sprite*> Map1::getBridges()

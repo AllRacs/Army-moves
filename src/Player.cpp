@@ -134,7 +134,7 @@ void Player::jump(std::vector<sf::Sprite*> m)
 
     if(flagJump)
     {
-        if(collision->getPosition().y <= 250)
+        if(collision->getPosition().y <= 260)
         {
             flagJump = false;
             grav = 0;

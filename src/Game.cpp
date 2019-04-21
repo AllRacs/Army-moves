@@ -187,7 +187,7 @@ void Game::update()
     if(state == 1)
     {
         player->update(dynamic_cast<Map1*>(*mapp)->getBridges());
-        dynamic_cast<Map1*>(*mapp)->update(player->getPoints());
+        dynamic_cast<Map1*>(*mapp)->update(player->getFuel());
     }
     else if(state == 2)
     {

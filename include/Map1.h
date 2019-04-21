@@ -19,6 +19,7 @@ class Map1 : public Map
         std::vector<sf::Sprite*> getBridges();
         std::vector<Enemy*> getEnemies();
         std::vector<Bullet*> getBullets();
+        bool getHouse(sf::RectangleShape*);
 
     protected:
 

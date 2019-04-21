@@ -27,6 +27,7 @@ class Game
         sf::Event *event;
         sf::Clock clock;
         sf::Texture *spritesheet;
+        bool godMode;
 
         //phase 1 & 2 and player
         Map **mapp, *map1, *map2;
@@ -43,6 +44,7 @@ class Game
         void initPlayer();
         void manageEvents();
         void switchState(int);
+        void endPhase1();
 
         //player & enemy logic
         bool bulletCollision();

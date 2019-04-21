@@ -102,7 +102,7 @@ void Player::jump(std::vector<sf::Sprite*> m)
         }
     }
 
-    std::cout << collision->getPosition().y << std::endl;
+    //std::cout << collision->getPosition().y << std::endl;
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && collision->getPosition().y>= 540 && collision->getPosition().y<=560)
     {
@@ -155,7 +155,7 @@ void Player::reposition()
     sf::Vector2f v = {150.f,300.f};
     collision->setPosition(v);
 
-    //animation->reposition(v);
+    //a_movement->reposition(v);
 }
 
 void Player::recieveDamage()
@@ -179,7 +179,7 @@ void Player::updatePoints(int n)
 
 void Player::updateFuel()
 {
-    if(cfuel.getElapsedTime().asSeconds() >= 0.2)
+    if(cfuel.getElapsedTime().asSeconds() >= 0.1)
     {
         fuel -= 10;
         cfuel.restart();
@@ -201,7 +201,7 @@ void Player::update(std::vector<sf::Sprite*> m)
 
 void Player::draw(sf::RenderWindow& w)
 {
-    //animation->draw(w);
+    //a_movement->draw(w);
     w.draw(*collision);
 }
 
@@ -218,4 +218,9 @@ int Player::getPoints()
 int Player::getLives()
 {
     return lives;
+}
+
+sf::RectangleShape* Player::getCollision()
+{
+    return collision;
 }

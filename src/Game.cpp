@@ -138,6 +138,14 @@ void Game::switchState(int s)
     }
 }
 
+void Game::endPhase1()
+{
+    if(state==1 && player->getFuel() < 500 && dynamic_cast<Map1*>(*mapp)->getHouse(player->getCollision()))
+    {
+        switchState(2);
+    }
+}
+
 
 bool Game::bulletCollision()
 {
@@ -168,17 +176,14 @@ void Game::gameLoop()
     while(window->isOpen())
     {
         checkLives();
-
         manageEvents();
-
         update();
-
         draw();
-
-        if(bulletCollision() || enemyCollision())
+        if(!godMode && (bulletCollision() || enemyCollision()))
         {
             player->recieveDamage();
         }
+        endPhase1();
     }
 }
 
@@ -194,10 +199,7 @@ void Game::update()
         player->update(dynamic_cast<Map2*>(*mapp)->getFloor());
         dynamic_cast<Map2*>(*mapp)->update();
     }
-
     hud->update(player->getFuel(), player->getPoints(), player->getLives());
-
-
 }
 
 void Game::draw()

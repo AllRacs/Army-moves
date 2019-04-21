@@ -27,11 +27,13 @@ class Player
         void reposition();
         void recieveDamage();
 
+        sf::RectangleShape* getCollision();
+
     protected:
 
     private:
         sf::Vector2f position;
-        Animation *animation;
+        Animation *a_movement;
         sf::RectangleShape *collision;
 
         int points, fuel, lives;

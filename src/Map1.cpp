@@ -140,15 +140,15 @@ void Map1::update(int fuel)
 {
     controlIA();
     controlBridges();
-    if(bridges.front()->getPosition().x + bridges.front()->getGlobalBounds().width <= 10 && fuel >= 4500)
+    if(bridges.front()->getPosition().x + bridges.front()->getGlobalBounds().width <= 10 && fuel >= 1000)
     {
         newBridge(false);
     }
-    else if(!houseEnd && fuel < 4500)
+    else if(!houseEnd && fuel < 1000)
     {
         newBridge(true);
     }
-    std::cout << bridges.size() << std::endl;
+    //std::cout << bridges.size() << std::endl;
 }
 
 void Map1::draw(sf::RenderWindow& w)
@@ -180,4 +180,15 @@ std::vector<Enemy*> Map1::getEnemies()
 std::vector<Bullet*> Map1::getBullets()
 {
     return bullets;
+}
+
+bool Map1::getHouse(sf::RectangleShape* p)
+{
+    bool res = false;
+        std::cout << "this is the end" << std::endl;
+    if(p->getPosition().x + p->getGlobalBounds().width/2 >= house->getPosition().x)
+    {
+        res = true;
+    }
+    return res;
 }

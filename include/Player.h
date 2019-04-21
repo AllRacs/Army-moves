@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <stdlib.h>
 #include <iostream>
+#include <math.h>
 
 #include "Animation.h"
 
@@ -40,8 +41,10 @@ class Player
 
 
         int phase;
+        bool flagJump;
+        float baseJump, grav;
 
-        sf::Clock c;
+        sf::Clock c, cjump;
 };
 
 #endif // PLAYER_H

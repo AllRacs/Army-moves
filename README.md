@@ -49,4 +49,8 @@ Remake of Army Moves MSX (phase 1 & 2) using C++ and [SFML](https://www.sfml-dev
 2. Open project
  - File > Open > {folderPath}/Army-moves/Army-moves.cbp
  - Project mode: DEBUG (Build target)
+ - Settings > Compiler > Compiler flags > **activate C++11**
  - Compile, execute and have fun ^^
+
+
+

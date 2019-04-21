@@ -6,6 +6,9 @@ Player::Player(int p)
     fuel = 5000;
     points = 0;
     lives = 5;
+    grav = 0;
+    flagJump = false;
+    baseJump = 0;
 
     if(p==1)
     {
@@ -99,28 +102,52 @@ void Player::jump(std::vector<sf::Sprite*> m)
         }
     }
 
-    std::cout << collision->getPosition().y << std::endl;
+    //std::cout << collision->getPosition().y << std::endl;
 
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && collision->getPosition().y<=558)
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && collision->getPosition().y>= 540 && collision->getPosition().y<=560)
     {
-        collision->move({0, -vel * time.asMilliseconds()});
+        flagJump = true;
+        baseJump = collision->getPosition().y;
+        cjump.restart();
+        grav = 0;
     }
-    else if(collision->getPosition().y >= 555)
+    else if(collision->getPosition().y > 560)
     {
         collision->move({0, vel * time.asMilliseconds()});
     }
-    else if(!collision->getGlobalBounds().intersects(m.at(down)->getGlobalBounds()))
+    else if(!flagJump && !collision->getGlobalBounds().intersects(m.at(down)->getGlobalBounds()))
     {
-        collision->move({0, vel * time.asMilliseconds()});
+        float y = (vel*0.2) * time.asMilliseconds();
+        y += grav;
+        grav += 0.16;
+        //std::cout << grav << std::endl;
+        collision->move({0, y});
+    }
+
+    if(flagJump)
+    {
+        if(collision->getPosition().y <= 250)
+        {
+            flagJump = false;
+            grav = 0;
+        }
+        std::cout << collision->getPosition().y << std::endl;
+        float y = -(vel*3) * time.asMilliseconds();
+        grav += 0.16;
+        y += grav;
+        collision->move({0, y});
     }
 }
 
 void Player::reposition()
 {
+    grav = 0;
+
     //select best position to respawn
     // sf::Vector2f v ...
-    sf::Vector2f v = {150.f,100.f};
+    sf::Vector2f v = {150.f,300.f};
     collision->setPosition(v);
+
     //animation->reposition(v);
 }
 

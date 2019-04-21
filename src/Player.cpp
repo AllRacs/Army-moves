@@ -102,7 +102,7 @@ void Player::jump(std::vector<sf::Sprite*> m)
         }
     }
 
-    //std::cout << collision->getPosition().y << std::endl;
+    std::cout << collision->getPosition().y << std::endl;
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && collision->getPosition().y>= 540 && collision->getPosition().y<=560)
     {
@@ -113,7 +113,11 @@ void Player::jump(std::vector<sf::Sprite*> m)
     }
     else if(collision->getPosition().y > 560)
     {
-        collision->move({0, vel * time.asMilliseconds()});
+        float y = (vel*0.2) * time.asMilliseconds();
+        y += grav;
+        grav += 0.16;
+        //std::cout << grav << std::endl;
+        collision->move({0, y});
     }
     else if(!flagJump && !collision->getGlobalBounds().intersects(m.at(down)->getGlobalBounds()))
     {
@@ -123,6 +127,10 @@ void Player::jump(std::vector<sf::Sprite*> m)
         //std::cout << grav << std::endl;
         collision->move({0, y});
     }
+    else if(collision->getGlobalBounds().intersects(m.at(down)->getGlobalBounds()))
+    {
+        grav = 0;
+    }
 
     if(flagJump)
     {
@@ -131,7 +139,6 @@ void Player::jump(std::vector<sf::Sprite*> m)
             flagJump = false;
             grav = 0;
         }
-        std::cout << collision->getPosition().y << std::endl;
         float y = -(vel*3) * time.asMilliseconds();
         grav += 0.16;
         y += grav;

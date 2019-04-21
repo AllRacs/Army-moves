@@ -2,6 +2,9 @@
 
 Animation::Animation(sf::Texture spritesheet, float nx, float ny, float nw, float nh, int nmaxx)
 {
+
+    scale = {1.006f, 1.534f};
+
     //ctor
     sprite = new sf::Sprite(spritesheet);
     x = nx;

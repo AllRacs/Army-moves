@@ -21,6 +21,8 @@ class HUD
         sf::Sprite layout;
         sf::Sprite *iconplayer;
 
+        sf::Vector2f scale;
+
         sf::Font *pixelFont;
         sf::Text *points;
         sf::Text *fuel;

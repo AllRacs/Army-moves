@@ -19,6 +19,7 @@ class Animation
         sf::Sprite *sprite;
         sf::Clock clock;
         int pos, x, y, w, h, nmax;
+        sf::Vector2f scale;
 };
 
 #endif // ANIMATION_H

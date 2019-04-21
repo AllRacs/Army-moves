@@ -3,15 +3,20 @@
 HUD::HUD(sf::Texture& spritesheet, int p)
 {
     //ctor
+
+    scale = {1.006f, 1.534f};
+
     layout.setTexture(spritesheet);
     layout.setTextureRect(sf::IntRect(1430,862,1010,666));
-    layout.setScale(1.006f, 1.534f);
+    layout.setScale(scale.x, scale.y);
     layout.setPosition(0.f, 0.f);
 
     iconplayer = new sf::Sprite(spritesheet);
+    iconplayer->setPosition({155.f,765.f});
+    iconplayer->setScale(scale.x, scale.y);
     if(p==1)
     {
-        iconplayer->setTextureRect(sf::IntRect());
+        iconplayer->setTextureRect(sf::IntRect(58,45,146,100));
     }
     else if(p==2)
     {
@@ -57,6 +62,7 @@ HUD::~HUD()
     delete pixelFont;
     delete points;
     delete fuel;
+    delete lives;
 }
 
 void HUD::update(int f, int p, int l)

@@ -50,6 +50,7 @@ class Game
         bool bulletCollision();
         bool enemyCollision();
         void checkLives();
+        void GODMODE();
 };
 
 #endif // GAME_H

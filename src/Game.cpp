@@ -16,9 +16,7 @@ Game::Game()
     state = 1;
     initGame(state);
 
-
-
-
+    godMode = false;
 
     gameLoop();
 
@@ -92,6 +90,28 @@ void Game::manageEvents()
                 {
                     window->close();
                 }
+                else if(event->key.code == sf::Keyboard::G)
+                {
+                    GODMODE();
+                }
+                if(event->key.code == sf::Keyboard::Q)
+                {
+                    //shoot 1
+                    std::cout << "SHOOT Q" << std::endl;
+                    if(state==1)
+                    {
+                        dynamic_cast<Map1*>(*mapp)->playerShoot(0);
+                    }
+                }
+                else if(event->key.code == sf::Keyboard::W)
+                {
+                    //shoot 2
+                    std::cout << "SHOOT W" << std::endl;
+                    if(state==1)
+                    {
+                        dynamic_cast<Map1*>(*mapp)->playerShoot(1);
+                    }
+                }
                 break;
 
         }
@@ -151,7 +171,24 @@ bool Game::bulletCollision()
 {
     bool res = false;
     //for each bullet -> if intersects -> res = true and lives-- and reposition
-    //...
+    if(state==1)
+    {
+        int eSize = dynamic_cast<Map1*>(*mapp)->getBullets().size();
+        if(eSize > 0)
+        {
+            for(int n = 0; n < eSize; n++)
+            {
+                if(player->getCollision()->getGlobalBounds().intersects(dynamic_cast<Map1*>(*mapp)->getBullets().at(n)->getCollision()->getGlobalBounds()))
+                {
+                    dynamic_cast<Map1*>(*mapp)->destroyBullet(n);
+                    player->recieveDamage();
+                    res = true;
+                    break;
+                }
+            }
+        }
+    }
+
     return res;
 }
 
@@ -170,6 +207,7 @@ bool Game::enemyCollision()
                 {
                     dynamic_cast<Map1*>(*mapp)->destroyEnemy(n);
                     player->recieveDamage();
+                    res = true;
                     break;
                 }
             }
@@ -191,8 +229,8 @@ void Game::gameLoop()
 {
     while(window->isOpen())
     {
-        checkLives();
         manageEvents();
+        checkLives();
         update();
         draw();
         if(!godMode && (bulletCollision() || enemyCollision()))
@@ -207,6 +245,7 @@ void Game::update()
 {
     if(state == 1)
     {
+        //dynamic_cast<Map1*>(*mapp)->manageEvents(*window);
         player->update(dynamic_cast<Map1*>(*mapp)->getBridges());
         dynamic_cast<Map1*>(*mapp)->update(player->getFuel(), dynamic_cast<Map1*>(*mapp)->getBridges());
     }
@@ -238,3 +277,8 @@ void Game::draw()
     window->display();
 }
 
+void Game::GODMODE()
+{
+    godMode = !godMode;
+    std::cout << "GODMODE: " << godMode << std::endl;
+}

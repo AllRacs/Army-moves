@@ -16,6 +16,7 @@ Enemy::Enemy(int n, int p, sf::Vector2f pos)
     {
         //cars
         std::cout << "NEW CAR" << std::endl;
+        ammo = 0;
 
         //animation
 
@@ -36,6 +37,7 @@ Enemy::Enemy(int n, int p, sf::Vector2f pos)
     {
         //helis
         std::cout << "NEW HELI" << std::endl;
+        ammo = 1;
 
         if(phase==1)
         {
@@ -64,6 +66,7 @@ Enemy::Enemy(int n, int p, sf::Vector2f pos)
     {
         //jets
         std::cout << "NEW JET" << std::endl;
+        ammo = 1;
     }
 }
 
@@ -171,6 +174,16 @@ void Enemy::jump(std::vector<sf::Sprite*> m)
         y += grav;
         collision->move({0, y});
     }
+}
+
+bool Enemy::shoot()
+{
+    bool res = false;
+    if(ammo-- > 0)
+    {
+        res = true;
+    }
+    return res;
 }
 
 sf::RectangleShape* Enemy::getCollision()

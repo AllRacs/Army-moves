@@ -12,6 +12,7 @@ Map1::Map1(sf::Texture& spritesheet)
 
     //SETTING BULLETS
     bullets = std::vector<Bullet*>{};
+    pBullets = std::vector<Bullet*>{};
 
     //SETTING BRIDGES
     bridges = std::vector<sf::Sprite*>{};
@@ -131,6 +132,45 @@ void Map1::destroyEnemy(int n)
     enemies.erase(enemies.begin()+n);
 }
 
+void Map1::destroyBullet(int n)
+{
+    delete bullets.at(n);
+    bullets.erase(bullets.begin()+n);
+}
+
+void Map1::playerShoot(int n)
+{
+    if(n==0)
+    {
+        //Q shoot
+    }
+    else if(n==1)
+    {
+        //W shoot
+    }
+}
+
+void Map1::hitEnemies()
+{
+    //if a pBullet intersects with some enemy --> destroyEnemy(n) and destroyPBullet(m)
+    for(int a = 0; a < pBullets.size(); a++)
+    {
+        for(int b = 0; b < enemies.size(); b++)
+        {
+            if(pBullets.at(a)->getCollision().getGlobalBounds().intersects(enemies.at(b)->getCollision()->getGlobalBounds()))
+            {
+                std::cout << "ENEMY SHOULD DIE" << std::endl;
+            }
+        }
+    }
+}
+
+void Map1::destroyPBullet(int n)
+{
+    delete pBullets.at(n);
+    pBullets.erase(pBullets.begin()+n);
+}
+
 void Map1::controlIA()
 {
 
@@ -142,16 +182,16 @@ void Map1::controlIA()
 
     for(int a = 0; a < enemies.size(); a++)
     {
+        if(enemies.at(a)->getCollision()->getPosition().x >= 500 && enemies.at(a)->getCollision()->getPosition().x <= 750 && enemies.at(a)->shoot())
+        {
+            bullets.push_back(new Bullet(*sp, 0, 1, 4, enemies.at(a)->getCollision()->getPosition()));
+        }
         if(enemies.at(a)->getCollision()->getPosition().x <= 10)
         {
             delete enemies.at(a);
             enemies.erase(enemies.begin()+a);
         }
     }
-    //move cars/heli
-    //...
-    //make jump (cars)
-    //...
     //make shoot (heli)
 }
 
@@ -187,6 +227,10 @@ void Map1::update(int fuel, std::vector<sf::Sprite*> m)
     {
         enemies.at(a)->controlEnemy(m);
     }
+    for(int a = 0; a < bullets.size(); a++)
+    {
+        bullets.at(a)->update();
+    }
 }
 
 void Map1::draw(sf::RenderWindow& w)
@@ -199,6 +243,11 @@ void Map1::draw(sf::RenderWindow& w)
     {
         enemies.at(a)->draw(w);
     }
+    for(int a = 0; a < bullets.size(); a++)
+    {
+        bullets.at(a)->draw(w);
+    }
+
     if(houseEnd)
     {
         w.draw(*house);

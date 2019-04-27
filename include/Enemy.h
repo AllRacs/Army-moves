@@ -18,6 +18,7 @@ class Enemy
         void draw(sf::RenderWindow&);
         void controlEnemy(std::vector<sf::Sprite*> m);
         void jump(std::vector<sf::Sprite*> m);
+        bool shoot();
 
         sf::RectangleShape* getCollision();
 
@@ -33,6 +34,8 @@ class Enemy
         int phase, type;
         bool flagJump;
         float baseJump, grav;
+
+        int ammo;
 
         sf::Clock c, cjump;
 

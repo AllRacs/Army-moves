@@ -41,11 +41,11 @@ class Player
         void updatePoints();
         void updateFuel();
 
-
         int phase;
         bool flagJump;
         float baseJump, grav;
 
+        sf::Event event;
         sf::Clock c, cjump;
 };
 

@@ -16,6 +16,11 @@ class Map1 : public Map
         void newBridge(bool);
         void newEnemy(int);
         void destroyEnemy(int);
+        void destroyBullet(int);
+
+        void playerShoot(int);
+        void hitEnemies();
+        void destroyPBullet(int);
 
         std::vector<sf::Sprite*> getBridges();
         std::vector<Enemy*> getEnemies();
@@ -30,13 +35,13 @@ class Map1 : public Map
         sf::Clock cbridges, cHeliSpawn;
 
         sf::Sprite *house;
-
         sf::Texture *sp;
 
         bool houseEnd;
 
         std::vector<Enemy*> enemies;
         std::vector<Bullet*> bullets;
+        std::vector<Bullet*> pBullets;
 };
 
 #endif // MAP1_H

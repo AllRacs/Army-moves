@@ -159,7 +159,23 @@ bool Game::enemyCollision()
 {
     bool res = false;
     //check collision with every enemy
-    //if this->collision intersects whit any enemy lives-- and reposition
+    if(state==1)
+    {
+        int eSize = dynamic_cast<Map1*>(*mapp)->getEnemies().size();
+        if(eSize > 0)
+        {
+            for(int n = 0; n < eSize; n++)
+            {
+                if(player->getCollision()->getGlobalBounds().intersects(dynamic_cast<Map1*>(*mapp)->getEnemies().at(n)->getCollision()->getGlobalBounds()))
+                {
+                    dynamic_cast<Map1*>(*mapp)->destroyEnemy(n);
+                    player->recieveDamage();
+                    break;
+                }
+            }
+        }
+    }
+
     return res;
 }
 
@@ -192,7 +208,7 @@ void Game::update()
     if(state == 1)
     {
         player->update(dynamic_cast<Map1*>(*mapp)->getBridges());
-        dynamic_cast<Map1*>(*mapp)->update(player->getFuel());
+        dynamic_cast<Map1*>(*mapp)->update(player->getFuel(), dynamic_cast<Map1*>(*mapp)->getBridges());
     }
     else if(state == 2)
     {

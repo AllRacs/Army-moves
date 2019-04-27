@@ -9,12 +9,13 @@ class Map1 : public Map
     public:
         Map1(sf::Texture&);
         virtual ~Map1();
-        void update(int);
+        void update(int,std::vector<sf::Sprite*>);
         void draw(sf::RenderWindow&);
         void controlIA();
         void controlBridges();
         void newBridge(bool);
-        void newEnemy();
+        void newEnemy(int);
+        void destroyEnemy(int);
 
         std::vector<sf::Sprite*> getBridges();
         std::vector<Enemy*> getEnemies();
@@ -26,7 +27,7 @@ class Map1 : public Map
     private:
         std::vector<sf::Sprite*> bridges;
         sf::IntRect ss_bridges[4];
-        sf::Clock cbridges;
+        sf::Clock cbridges, cHeliSpawn;
 
         sf::Sprite *house;
 

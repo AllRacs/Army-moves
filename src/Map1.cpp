@@ -32,6 +32,7 @@ Map1::Map1(sf::Texture& spritesheet)
             bridges.back()->setPosition({bridges.at(a-1)->getPosition().x
                                         + bridges.at(a-1)->getGlobalBounds().width
                                         + 150, 550.f});
+            newEnemy(a);
         }
         else
         {
@@ -63,7 +64,8 @@ Map1::~Map1()
         delete bullets.front();
         bullets.erase(bullets.begin());
     }
-    delete house;
+    if(houseEnd)
+        delete house;
 }
 
 void Map1::newBridge(bool fin)
@@ -84,6 +86,8 @@ void Map1::newBridge(bool fin)
                                         + bridges.at(bridges.size()-2)->getGlobalBounds().width
                                         + 150, 550.f});
         }
+
+        newEnemy(0);
 
     }
     else if(fin)
@@ -108,13 +112,42 @@ void Map1::newBridge(bool fin)
     }
 }
 
-void Map1::newEnemy()
+void Map1::newEnemy(int n)
 {
-    enemies.push_back(new Enemy(1));
+    if(n == 0)
+    {
+        sf::Vector2f pos = {bridges.back()->getPosition().x + bridges.back()->getGlobalBounds().width, bridges.back()->getPosition().y};
+        enemies.push_back(new Enemy(0, 1, pos));
+    }
+    if(n == 1)
+    {
+        enemies.push_back(new Enemy(1, 1, {0.f, 0.f}));
+    }
+}
+
+void Map1::destroyEnemy(int n)
+{
+    delete enemies.at(n);
+    enemies.erase(enemies.begin()+n);
 }
 
 void Map1::controlIA()
 {
+
+    if(cHeliSpawn.getElapsedTime().asSeconds() >= 5)
+    {
+        newEnemy(1);
+        cHeliSpawn.restart();
+    }
+
+    for(int a = 0; a < enemies.size(); a++)
+    {
+        if(enemies.at(a)->getCollision()->getPosition().x <= 10)
+        {
+            delete enemies.at(a);
+            enemies.erase(enemies.begin()+a);
+        }
+    }
     //move cars/heli
     //...
     //make jump (cars)
@@ -136,7 +169,7 @@ void Map1::controlBridges()
     }
 }
 
-void Map1::update(int fuel)
+void Map1::update(int fuel, std::vector<sf::Sprite*> m)
 {
     controlIA();
     controlBridges();
@@ -147,8 +180,13 @@ void Map1::update(int fuel)
     else if(!houseEnd && fuel < 1000)
     {
         newBridge(true);
+        std::cout << bridges.size() << std::endl;
     }
-    //std::cout << bridges.size() << std::endl;
+
+    for(int a = 0; a < enemies.size(); a++)
+    {
+        enemies.at(a)->controlEnemy(m);
+    }
 }
 
 void Map1::draw(sf::RenderWindow& w)
@@ -185,7 +223,6 @@ std::vector<Bullet*> Map1::getBullets()
 bool Map1::getHouse(sf::RectangleShape* p)
 {
     bool res = false;
-        std::cout << "this is the end" << std::endl;
     if(p->getPosition().x + p->getGlobalBounds().width/2 >= house->getPosition().x)
     {
         res = true;

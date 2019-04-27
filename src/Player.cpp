@@ -160,6 +160,7 @@ void Player::reposition()
 
 void Player::recieveDamage()
 {
+    reposition();
     lives--;
 }
 
@@ -194,7 +195,6 @@ void Player::update(std::vector<sf::Sprite*> m)
 
     if(collision->getPosition().y >= 680)
     {
-        reposition();
         recieveDamage();
     }
 }

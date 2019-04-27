@@ -52,5 +52,17 @@ Remake of Army Moves MSX (phase 1 & 2) using C++ and [SFML](https://www.sfml-dev
  - Settings > Compiler > Compiler flags > **activate C++11**
  - Compile, execute and have fun ^^
 
+---
+
+### Controls:
+ - Start directly a concrete phase: F1 for phase 1, F2 for phase 2
+
+ - Phase 1:
+   - Arrow keys: Up -> jump, Left -> car reverse, Right -> car forward
+   - Q -> shoot above, W -> shoot straight
+
+ - Phase 2:
+   - Arrow keys: Up, Down, Left, Right -> move helicopter
+   - Q -> shoot straight and below at the same time
 
 

@@ -138,15 +138,17 @@ void Map1::destroyBullet(int n)
     bullets.erase(bullets.begin()+n);
 }
 
-void Map1::playerShoot(int n)
+void Map1::playerShoot(int n, sf::Vector2f playerPos)
 {
     if(n==0)
     {
         //Q shoot
+        pBullets.push_back(new Bullet(*sp, 1, 1, 1, {playerPos.x + 40, playerPos.y}));
     }
     else if(n==1)
     {
         //W shoot
+        pBullets.push_back(new Bullet(*sp, 1, 1, 2, {playerPos.x + 40, playerPos.y}));
     }
 }
 
@@ -157,7 +159,7 @@ void Map1::hitEnemies()
     {
         for(int b = 0; b < enemies.size(); b++)
         {
-            if(pBullets.at(a)->getCollision().getGlobalBounds().intersects(enemies.at(b)->getCollision()->getGlobalBounds()))
+            if(pBullets.at(a)->getCollision()->getGlobalBounds().intersects(enemies.at(b)->getCollision()->getGlobalBounds()))
             {
                 std::cout << "ENEMY SHOULD DIE" << std::endl;
             }
@@ -231,6 +233,10 @@ void Map1::update(int fuel, std::vector<sf::Sprite*> m)
     {
         bullets.at(a)->update();
     }
+    for(int a = 0; a < pBullets.size(); a++)
+    {
+        pBullets.at(a)->update();
+    }
 }
 
 void Map1::draw(sf::RenderWindow& w)
@@ -247,7 +253,10 @@ void Map1::draw(sf::RenderWindow& w)
     {
         bullets.at(a)->draw(w);
     }
-
+    for(int a = 0; a < pBullets.size(); a++)
+    {
+        pBullets.at(a)->draw(w);
+    }
     if(houseEnd)
     {
         w.draw(*house);

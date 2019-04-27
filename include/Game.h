@@ -25,7 +25,7 @@ class Game
         sf::RenderWindow *window;
         sf::View *view;
         sf::Event *event;
-        sf::Clock clock;
+        sf::Clock clock, cShootQ, cShootW;
         sf::Texture *spritesheet;
         bool godMode;
 

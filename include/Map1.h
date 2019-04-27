@@ -18,7 +18,7 @@ class Map1 : public Map
         void destroyEnemy(int);
         void destroyBullet(int);
 
-        void playerShoot(int);
+        void playerShoot(int,sf::Vector2f);
         void hitEnemies();
         void destroyPBullet(int);
 

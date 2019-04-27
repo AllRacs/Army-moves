@@ -29,11 +29,11 @@ Game::~Game()
     delete hud;
     delete view;
     delete window;
-    if(state==1)
+    if(state == 1)
     {
         delete map1;
     }
-    else if(state==2)
+    else if(state == 2)
     {
         delete map2;
     }
@@ -94,22 +94,22 @@ void Game::manageEvents()
                 {
                     GODMODE();
                 }
-                if(event->key.code == sf::Keyboard::Q)
+                if(event->key.code == sf::Keyboard::Q && cShootQ.restart().asSeconds() >= 0.15)
                 {
                     //shoot 1
                     std::cout << "SHOOT Q" << std::endl;
-                    if(state==1)
+                    if(state == 1)
                     {
-                        dynamic_cast<Map1*>(*mapp)->playerShoot(0);
+                        dynamic_cast<Map1*>(*mapp)->playerShoot(0, player->getCollision()->getPosition());
                     }
                 }
-                else if(event->key.code == sf::Keyboard::W)
+                else if(event->key.code == sf::Keyboard::W && cShootW.restart().asSeconds() >= 0.15)
                 {
                     //shoot 2
                     std::cout << "SHOOT W" << std::endl;
-                    if(state==1)
+                    if(state == 1)
                     {
-                        dynamic_cast<Map1*>(*mapp)->playerShoot(1);
+                        dynamic_cast<Map1*>(*mapp)->playerShoot(1, player->getCollision()->getPosition());
                     }
                 }
                 break;
@@ -123,13 +123,13 @@ void Game::switchState(int s)
     if(s == 1)
     {
         delete player;
-        if(state==1)
+        if(state == 1)
         {
             delete map1;
             delete hud;
             state = s;
         }
-        else if(state==2)
+        else if(state == 2)
         {
             delete map2;
             delete hud;
@@ -142,12 +142,12 @@ void Game::switchState(int s)
     else if(s == 2)
     {
         delete player;
-        if(state==1)
+        if(state == 1)
         {
             delete map1;
             state = s;
         }
-        else if(state==2)
+        else if(state == 2)
         {
             delete map2;
             state = s;
@@ -160,7 +160,7 @@ void Game::switchState(int s)
 
 void Game::endPhase1()
 {
-    if(state==1 && player->getFuel() < 500 && dynamic_cast<Map1*>(*mapp)->getHouse(player->getCollision()))
+    if(state == 1 && player->getFuel() < 500 && dynamic_cast<Map1*>(*mapp)->getHouse(player->getCollision()))
     {
         switchState(2);
     }
@@ -171,7 +171,7 @@ bool Game::bulletCollision()
 {
     bool res = false;
     //for each bullet -> if intersects -> res = true and lives-- and reposition
-    if(state==1)
+    if(state == 1)
     {
         int eSize = dynamic_cast<Map1*>(*mapp)->getBullets().size();
         if(eSize > 0)
@@ -196,7 +196,7 @@ bool Game::enemyCollision()
 {
     bool res = false;
     //check collision with every enemy
-    if(state==1)
+    if(state == 1)
     {
         int eSize = dynamic_cast<Map1*>(*mapp)->getEnemies().size();
         if(eSize > 0)
@@ -261,11 +261,11 @@ void Game::draw()
 {
     window->clear(sf::Color::Black);
 
-    if(state==1)
+    if(state == 1)
     {
         dynamic_cast<Map1*>(*mapp)->draw(*window);
     }
-    else if(state==2)
+    else if(state == 2)
     {
         dynamic_cast<Map2*>(*mapp)->draw(*window);
     }

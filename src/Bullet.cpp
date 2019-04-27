@@ -8,15 +8,17 @@ Bullet::Bullet(sf::Texture& spritesheet,int n, int p, int d, sf::Vector2f pos)
     dir = d;
 
     bullet = new sf::Sprite(spritesheet);
+    scale = {1.006f, 1.534f};
+    bullet->setScale({scale.x, scale.y});
     if(n==0)
     {
         //sprite: bullet
-        bullet->setTextureRect(sf::IntRect(527,247,21,21));
+        bullet->setTextureRect(sf::IntRect(520,245,21,21));
     }
     else if(n==1)
     {
         //sprite: rocket
-        bullet->setTextureRect(sf::IntRect(535,246,54,21));
+        bullet->setTextureRect(sf::IntRect(520,245,21,21));
     }
 
     bullet->setPosition(pos);
@@ -35,19 +37,26 @@ void Bullet::update()
     // dir: 1 => up and right, 2 => right straight, 3 => down, 4 => left and down, 5 => straight left
     switch(dir)
     {
-        case 1:
-            bullet->move(vel * time.asMilliseconds(), -vel * 3/4 * time.asMilliseconds());
+        case 1:     // dir: 1 => up and right
+            if(bullet->getPosition().y >= 100)
+            {
+                bullet->move(vel * time.asMilliseconds(), -vel * time.asMilliseconds());
+            }
+            else
+            {
+                bullet->move(vel * time.asMilliseconds(), 0);
+            }
             break;
-        case 2:
+        case 2:     //dir: 2 => right straight
             break;
             bullet->move(vel * time.asMilliseconds(), 0);
-        case 3:
+        case 3:     //dir: 3 => down
             bullet->move(0, vel * 3/4 * time.asMilliseconds());
             break;
-        case 4:
+        case 4:     //dir: 4 => left and down
             bullet->move(-vel * time.asMilliseconds(), vel * 2/4 * time.asMilliseconds());
             break;
-        case 5:
+        case 5:     //dir: 5 => straight left
             bullet->move(-vel * time.asMilliseconds(), 0);
             break;
     }

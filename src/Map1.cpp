@@ -138,17 +138,23 @@ void Map1::destroyBullet(int n)
     bullets.erase(bullets.begin()+n);
 }
 
+void Map1::destroyPBullet(int n)
+{
+    delete pBullets.at(n);
+    pBullets.erase(pBullets.begin()+n);
+}
+
 void Map1::playerShoot(int n, sf::Vector2f playerPos)
 {
     if(n==0)
     {
         //Q shoot
-        pBullets.push_back(new Bullet(*sp, 1, 1, 1, {playerPos.x + 40, playerPos.y}));
+        pBullets.push_back(new Bullet(*sp, 1, 1, 1, {playerPos.x - 10, playerPos.y - 80}));
     }
     else if(n==1)
     {
         //W shoot
-        pBullets.push_back(new Bullet(*sp, 1, 1, 2, {playerPos.x + 40, playerPos.y}));
+        pBullets.push_back(new Bullet(*sp, 1, 1, 2, {playerPos.x - 10, playerPos.y - 80}));
     }
 }
 
@@ -161,22 +167,18 @@ void Map1::hitEnemies()
         {
             if(pBullets.at(a)->getCollision()->getGlobalBounds().intersects(enemies.at(b)->getCollision()->getGlobalBounds()))
             {
-                std::cout << "ENEMY SHOULD DIE" << std::endl;
+                destroyPBullet(a);
+                destroyEnemy(b);
+                break;break;
             }
         }
     }
 }
 
-void Map1::destroyPBullet(int n)
-{
-    delete pBullets.at(n);
-    pBullets.erase(pBullets.begin()+n);
-}
-
 void Map1::controlIA()
 {
 
-    if(cHeliSpawn.getElapsedTime().asSeconds() >= 5)
+    if(cHeliSpawn.getElapsedTime().asSeconds() >= 3)
     {
         newEnemy(1);
         cHeliSpawn.restart();
@@ -194,7 +196,7 @@ void Map1::controlIA()
             enemies.erase(enemies.begin()+a);
         }
     }
-    //make shoot (heli)
+    hitEnemies();
 }
 
 void Map1::controlBridges()
@@ -215,11 +217,11 @@ void Map1::update(int fuel, std::vector<sf::Sprite*> m)
 {
     controlIA();
     controlBridges();
-    if(bridges.front()->getPosition().x + bridges.front()->getGlobalBounds().width <= 10 && fuel >= 1000)
+    if(bridges.front()->getPosition().x + bridges.front()->getGlobalBounds().width <= 10 && fuel >= 2000)
     {
         newBridge(false);
     }
-    else if(!houseEnd && fuel < 1000)
+    else if(!houseEnd && fuel < 2000)
     {
         newBridge(true);
         std::cout << bridges.size() << std::endl;

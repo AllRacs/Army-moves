@@ -12,7 +12,7 @@
 class Player
 {
     public:
-        Player(int);
+        Player(sf::Texture&,int);
         virtual ~Player();
         void update(std::vector<sf::Sprite*>);
         void draw(sf::RenderWindow&);

@@ -18,8 +18,6 @@ Enemy::Enemy(int n, int p, sf::Vector2f pos)
         std::cout << "NEW CAR" << std::endl;
         ammo = 0;
 
-        //animation
-
 
         //collision
         position = {x, 550.f};
@@ -29,6 +27,8 @@ Enemy::Enemy(int n, int p, sf::Vector2f pos)
         collision->setOrigin({50.f,50.f});
         collision->setFillColor(sf::Color::Red);
         collision->setOrigin(collision->getGlobalBounds().width, collision->getGlobalBounds().height);
+
+        //animation
 
 
 
@@ -48,9 +48,6 @@ Enemy::Enemy(int n, int p, sf::Vector2f pos)
             position = {10.f, 200.f};
         }
 
-        //animation
-
-
         //collision
         collision = new sf::RectangleShape();
         collision->setSize({100.f,100.f});
@@ -58,6 +55,9 @@ Enemy::Enemy(int n, int p, sf::Vector2f pos)
         collision->setOrigin({50.f,50.f});
         collision->setFillColor(sf::Color::Red);
         collision->setOrigin(collision->getGlobalBounds().width, collision->getGlobalBounds().height);
+
+        //animation
+
 
 
 
@@ -91,7 +91,6 @@ void Enemy::controlEnemy(std::vector<sf::Sprite*> m)
     if(type==0)
     {
         //car movement
-        //std::cout << time.asSeconds() << std::endl;
         collision->move({velCar * time.asMilliseconds(), 0});
         //jump(m);
 
@@ -132,8 +131,6 @@ void Enemy::jump(std::vector<sf::Sprite*> m)
         }
     }
 
-    //std::cout << collision->getPosition().y << std::endl;
-
     if(time2jump && collision->getPosition().y>= 540 && collision->getPosition().y<=560)
     {
         flagJump = true;
@@ -146,7 +143,6 @@ void Enemy::jump(std::vector<sf::Sprite*> m)
         float y = (velCar*0.2) * time.asMilliseconds();
         y += grav;
         grav += 0.16;
-        //std::cout << grav << std::endl;
         collision->move({0, y});
     }
     else if(!flagJump && !collision->getGlobalBounds().intersects(m.at(down)->getGlobalBounds()))
@@ -154,7 +150,6 @@ void Enemy::jump(std::vector<sf::Sprite*> m)
         float y = (velCar*0.2) * time.asMilliseconds();
         y += grav;
         grav += 0.16;
-        //std::cout << grav << std::endl;
         collision->move({0, y});
     }
     else if(collision->getGlobalBounds().intersects(m.at(down)->getGlobalBounds()))

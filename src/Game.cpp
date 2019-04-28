@@ -68,7 +68,7 @@ void Game::initMap2()
 
 void Game::initPlayer()
 {
-    player = new Player(state);
+    player = new Player(*spritesheet, state);
 }
 
 void Game::manageEvents()
@@ -160,7 +160,7 @@ void Game::switchState(int s)
 
 void Game::endPhase1()
 {
-    if(state == 1 && player->getFuel() < 500 && dynamic_cast<Map1*>(*mapp)->getHouse(player->getCollision()))
+    if(state == 1 && player->getFuel() < 2000 && dynamic_cast<Map1*>(*mapp)->getHouse(player->getCollision()))
     {
         switchState(2);
     }
@@ -181,7 +181,11 @@ bool Game::bulletCollision()
                 if(player->getCollision()->getGlobalBounds().intersects(dynamic_cast<Map1*>(*mapp)->getBullets().at(n)->getCollision()->getGlobalBounds()))
                 {
                     dynamic_cast<Map1*>(*mapp)->destroyBullet(n);
-                    player->recieveDamage();
+                    if(cDamageCD.getElapsedTime().asSeconds() >= 0.1)
+                    {
+                        player->recieveDamage();
+                        cDamageCD.restart();
+                    }
                     res = true;
                     break;
                 }
@@ -206,7 +210,11 @@ bool Game::enemyCollision()
                 if(player->getCollision()->getGlobalBounds().intersects(dynamic_cast<Map1*>(*mapp)->getEnemies().at(n)->getCollision()->getGlobalBounds()))
                 {
                     dynamic_cast<Map1*>(*mapp)->destroyEnemy(n);
-                    player->recieveDamage();
+                    if(cDamageCD.getElapsedTime().asSeconds() >= 0.1)
+                    {
+                        player->recieveDamage();
+                        cDamageCD.restart();
+                    }
                     res = true;
                     break;
                 }
@@ -219,7 +227,7 @@ bool Game::enemyCollision()
 
 void Game::checkLives()
 {
-    if(player->getLives() == 0)
+    if(player->getLives() <= 0)
     {
         switchState(state);
     }
@@ -233,9 +241,10 @@ void Game::gameLoop()
         checkLives();
         update();
         draw();
-        if(!godMode && (bulletCollision() || enemyCollision()))
+        if(!godMode)
         {
-            player->recieveDamage();
+            bulletCollision();
+            enemyCollision();
         }
         endPhase1();
     }

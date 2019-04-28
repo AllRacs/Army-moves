@@ -10,15 +10,15 @@ Bullet::Bullet(sf::Texture& spritesheet,int n, int p, int d, sf::Vector2f pos)
     bullet = new sf::Sprite(spritesheet);
     scale = {1.006f, 1.534f};
     bullet->setScale({scale.x, scale.y});
-    if(n==0)
+    if(n == 0)
     {
         //sprite: bullet
         bullet->setTextureRect(sf::IntRect(520,245,21,21));
     }
-    else if(n==1)
+    else if(n == 1)
     {
         //sprite: rocket
-        bullet->setTextureRect(sf::IntRect(520,245,21,21));
+        bullet->setTextureRect(sf::IntRect(400,72,54,36));
     }
 
     bullet->setPosition(pos);
@@ -48,8 +48,8 @@ void Bullet::update()
             }
             break;
         case 2:     //dir: 2 => right straight
-            break;
             bullet->move(vel * time.asMilliseconds(), 0);
+            break;
         case 3:     //dir: 3 => down
             bullet->move(0, vel * 3/4 * time.asMilliseconds());
             break;

@@ -7,11 +7,12 @@
 class Animation
 {
     public:
-        Animation(sf::Texture,float,float,float,float, int);
+        Animation(sf::Texture&,float,float,float,float,int,sf::Vector2f,float);
         virtual ~Animation();
         void update();
         void draw(sf::RenderWindow&);
-        void die();
+        void movement(sf::Vector2f);
+        void reposition(sf::Vector2f);
 
     protected:
 
@@ -19,6 +20,7 @@ class Animation
         sf::Sprite *sprite;
         sf::Clock clock;
         int pos, x, y, w, h, nmax;
+        float vel;
         sf::Vector2f scale;
 };
 

@@ -6,7 +6,7 @@
 
 #include "Animation.h"
 
-#define velCar -0.35
+#define velCar -0.4
 #define vel -0.25
 
 class Enemy

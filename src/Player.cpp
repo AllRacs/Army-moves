@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(int p)
+Player::Player(sf::Texture& spritesheet, int p)
 {
     //ctor
     fuel = 5000;
@@ -13,23 +13,22 @@ Player::Player(int p)
     if(p==1)
     {
         phase = p;
-        //animation
-
 
         //collision
         position = {150.f, 500.f};
         collision = new sf::RectangleShape();
         collision->setSize({100.f,100.f});
         collision->setPosition(position);
-        collision->setOrigin({50.f,50.f});
+        collision->setOrigin({50.f,0.f});
         collision->setFillColor(sf::Color::Red);
         collision->setOrigin(collision->getGlobalBounds().width, collision->getGlobalBounds().height);
+
+        //animation
+        a_movement = new Animation(spritesheet, 63, 50, 151, 82, 2, {position.x - collision->getGlobalBounds().width/2, position.y - collision->getGlobalBounds().height/2}, 0.2);
     }
     else if(p==2)
     {
         phase = p;
-        //animation
-
 
         //collision
         position = {800.f, 200.f};
@@ -39,6 +38,9 @@ Player::Player(int p)
         collision->setOrigin({50.f,50.f});
         collision->setFillColor(sf::Color::Red);
         collision->setOrigin(collision->getGlobalBounds().width, collision->getGlobalBounds().height);
+
+        //animation
+        a_movement = new Animation(spritesheet, 1055, 208, 144, 82, 4, {position.x - collision->getGlobalBounds().width/2, position.y - collision->getGlobalBounds().height/2}, 0.1);
     }
 
     std::cout << "Player created" << std::endl;
@@ -48,6 +50,7 @@ Player::~Player()
 {
     //dtor
     delete collision;
+    delete a_movement;
 }
 
 void Player::controlPlayer(std::vector<sf::Sprite*> m)
@@ -55,16 +58,18 @@ void Player::controlPlayer(std::vector<sf::Sprite*> m)
     sf::Time time = c.getElapsedTime();
     //ŝstd::cout << time.asSeconds() << std::endl;
 
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && collision->getPosition().x >= 125)
     {
         //collision->setScale(-0.2, 0.2);
         collision->move({-vel * time.asMilliseconds(), 0});
+        a_movement->movement({-vel * time.asMilliseconds(), 0});
         //std::cout << collision->getPosition().x << " --- " << collision->getPosition().y << std::endl;
     }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && collision->getPosition().x <= 970)
     {
         //collision->setScale(-0.2, 0.2);
         collision->move({vel * time.asMilliseconds(), 0});
+        a_movement->movement({vel * time.asMilliseconds(), 0});
         //std::cout << collision->getPosition().x << " +++ " << collision->getPosition().y << std::endl;
 
     }
@@ -74,13 +79,15 @@ void Player::controlPlayer(std::vector<sf::Sprite*> m)
     }
     else if(phase==2)
     {
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && collision->getPosition().y >= 140)
         {
             collision->move({0, -vel * time.asMilliseconds()});
+            a_movement->movement({0, -vel * time.asMilliseconds()});
         }
-        else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && collision->getPosition().y <= 555)
         {
             collision->move({0, vel * time.asMilliseconds()});
+            a_movement->movement({0, vel * time.asMilliseconds()});
         }
     }
 
@@ -118,6 +125,7 @@ void Player::jump(std::vector<sf::Sprite*> m)
         grav += 0.16;
         //std::cout << grav << std::endl;
         collision->move({0, y});
+        a_movement->movement({0, y});
     }
     else if(!flagJump && !collision->getGlobalBounds().intersects(m.at(down)->getGlobalBounds()))
     {
@@ -126,6 +134,7 @@ void Player::jump(std::vector<sf::Sprite*> m)
         grav += 0.16;
         //std::cout << grav << std::endl;
         collision->move({0, y});
+        a_movement->movement({0, y});
     }
     else if(collision->getGlobalBounds().intersects(m.at(down)->getGlobalBounds()))
     {
@@ -143,6 +152,7 @@ void Player::jump(std::vector<sf::Sprite*> m)
         grav += 0.16;
         y += grav;
         collision->move({0, y});
+        a_movement->movement({0, y});
     }
 }
 
@@ -153,9 +163,8 @@ void Player::reposition()
     //select best position to respawn
     // sf::Vector2f v ...
     sf::Vector2f v = {150.f,300.f};
+    a_movement->reposition({v.x - collision->getGlobalBounds().width/2, v.y - collision->getGlobalBounds().height/2});
     collision->setPosition(v);
-
-    //a_movement->reposition(v);
 }
 
 void Player::recieveDamage()
@@ -192,7 +201,7 @@ void Player::update(std::vector<sf::Sprite*> m)
     controlPlayer(m);
     updatePoints();
     updateFuel();
-
+    a_movement->update();
     if(collision->getPosition().y >= 680)
     {
         recieveDamage();
@@ -201,8 +210,8 @@ void Player::update(std::vector<sf::Sprite*> m)
 
 void Player::draw(sf::RenderWindow& w)
 {
-    //a_movement->draw(w);
-    w.draw(*collision);
+    //w.draw(*collision);
+    a_movement->draw(w);
 }
 
 int Player::getFuel()

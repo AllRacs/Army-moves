@@ -83,7 +83,7 @@ void Enemy::update(std::vector<sf::Sprite*> m)
 
 void Enemy::draw(sf::RenderWindow& w)
 {
-    w.draw(*collision);
+    //w.draw(*collision);
     a_movement->draw(w);
 }
 
@@ -132,7 +132,7 @@ void Enemy::jump(std::vector<sf::Sprite*> m)
             down = a;
             jumping = true;
             jumpUp = true;
-            grav = 10;
+            grav = 1;
             std::cout << "time 2 jump " << collision->getPosition().y << std::endl;
             cjump.restart();
             break;
@@ -146,10 +146,10 @@ void Enemy::jump(std::vector<sf::Sprite*> m)
         {
             //move up
             //...
-            collision->move({0.f, vel * time.asMilliseconds()});
-            a_movement->movement({0.f, vel * time.asMilliseconds()});
-
-            if(collision->getPosition().y <= 300)
+            collision->move({0.f, (vel - 0.3) * time.asMilliseconds() * grav});
+            a_movement->movement({0.f, (vel - 0.3) * time.asMilliseconds() * grav});
+            grav -= 0.01;
+            if(collision->getPosition().y <= 325)
             {
                 jumpUp = false;
                 jumpDown = true;
@@ -159,9 +159,9 @@ void Enemy::jump(std::vector<sf::Sprite*> m)
         {
             //move down
             //...
-            collision->move({0.f, -vel * time.asMilliseconds()});
-            a_movement->movement({0.f, -vel * time.asMilliseconds()});
-
+            collision->move({0.f, -(vel - 0.3) * time.asMilliseconds() * grav});
+            a_movement->movement({0.f, -(vel - 0.3) * time.asMilliseconds() * grav});
+            grav += 0.01;
             if(collision->getPosition().y >= 550)
             {
                 jumpDown = false;
@@ -169,16 +169,6 @@ void Enemy::jump(std::vector<sf::Sprite*> m)
             }
         }
     }
-
-
-    /*
-    if(cjump.getElapsedTime().asSeconds() <= 2)
-    {
-        std::cout << "jumping" << std::endl;
-        collision->move({0.f, vel * time.asMilliseconds()});
-        a_movement->movement({0.f, vel * time.asMilliseconds()});
-    }
-    */
 }
 
 bool Enemy::shoot()

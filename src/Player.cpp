@@ -39,7 +39,7 @@ Player::Player(sf::Texture& spritesheet, int p)
         collision->setOrigin(collision->getGlobalBounds().width, collision->getGlobalBounds().height);
 
         //animation
-        a_movement = new Animation(spritesheet, 1055, 208, 144, 82, 4, {position.x - collision->getGlobalBounds().width/2, position.y - collision->getGlobalBounds().height/2}, 0.1, dir);
+        a_movement = new Animation(spritesheet, 1055, 208, 144, 82, 4, {position.x - collision->getGlobalBounds().width/2 + 20, position.y - collision->getGlobalBounds().height/2}, 0.1, dir);
     }
 
     std::cout << "Player created" << std::endl;

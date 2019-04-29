@@ -36,7 +36,7 @@ class Player
         Animation *a_movement;
         sf::RectangleShape *collision;
 
-        int points, fuel, lives;
+        int points, fuel, lives, dir;
         sf::Clock cpoints, cfuel, clives;
         void updatePoints();
         void updateFuel();

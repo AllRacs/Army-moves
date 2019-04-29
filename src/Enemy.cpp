@@ -1,24 +1,25 @@
 #include "Enemy.h"
 
-Enemy::Enemy(int n, int p, sf::Vector2f pos)
+Enemy::Enemy(sf::Texture& spritesheet, int n, int p, sf::Vector2f pos)
 {
     //ctor
 
 
     phase = p;
-
     type = n;
-    flagJump = false;
+    jumping = false;
+    jumpUp = true;
+    jumpDown = false;
+    grav = 0;
 
     float x = pos.x - 20; // X coord to spawn at almost final of a bridge
 
     if(n==0)
     {
         //cars
-        std::cout << "NEW CAR" << std::endl;
+        //std::cout << "NEW CAR" << std::endl;
         ammo = 0;
-
-
+        dir = 1;
         //collision
         position = {x, 550.f};
         collision = new sf::RectangleShape();
@@ -29,16 +30,15 @@ Enemy::Enemy(int n, int p, sf::Vector2f pos)
         collision->setOrigin(collision->getGlobalBounds().width, collision->getGlobalBounds().height);
 
         //animation
-
-
-
+        a_movement = new Animation(spritesheet, 63, 199, 159, 102, 2,
+                                   {position.x - collision->getGlobalBounds().width/2 + 20, position.y - collision->getGlobalBounds().height/2}, 0.2, dir);
     }
     else if(n==1)
     {
         //helis
-        std::cout << "NEW HELI" << std::endl;
+        //std::cout << "NEW HELI" << std::endl;
         ammo = 1;
-
+        dir = 1;
         if(phase==1)
         {
             position = {1200.f, 200.f};
@@ -57,10 +57,8 @@ Enemy::Enemy(int n, int p, sf::Vector2f pos)
         collision->setOrigin(collision->getGlobalBounds().width, collision->getGlobalBounds().height);
 
         //animation
-
-
-
-
+        a_movement = new Animation(spritesheet, 1055, 208, 144, 82, 4,
+                                   {position.x - collision->getGlobalBounds().width/2 + 20, position.y - collision->getGlobalBounds().height/2}, 0.2, dir);
     }
     else if(p==2 && n==2)
     {
@@ -73,16 +71,20 @@ Enemy::Enemy(int n, int p, sf::Vector2f pos)
 Enemy::~Enemy()
 {
     //dtor
+    delete collision;
+    delete a_movement;
 }
 
 void Enemy::update(std::vector<sf::Sprite*> m)
 {
     controlEnemy(m);
+    a_movement->update();
 }
 
 void Enemy::draw(sf::RenderWindow& w)
 {
     w.draw(*collision);
+    a_movement->draw(w);
 }
 
 void Enemy::controlEnemy(std::vector<sf::Sprite*> m)
@@ -92,7 +94,8 @@ void Enemy::controlEnemy(std::vector<sf::Sprite*> m)
     {
         //car movement
         collision->move({velCar * time.asMilliseconds(), 0});
-        //jump(m);
+        a_movement->movement({velCar * time.asMilliseconds(), 0});
+        jump(m);
 
         c.restart();
     }
@@ -106,6 +109,7 @@ void Enemy::controlEnemy(std::vector<sf::Sprite*> m)
 
         //heli movement
         collision->move({dir * vel * time.asMilliseconds(), 0});
+        a_movement->movement({dir * vel * time.asMilliseconds(), 0});
     }
     else if(type==2)
     {
@@ -118,57 +122,63 @@ void Enemy::jump(std::vector<sf::Sprite*> m)
 {
     sf::Time time = c.getElapsedTime();
     int down = 0;
-    bool time2jump = false;
 
     //check which is below
-    for(int a = 0; a < m.size(); a++)
+    for(int a = 0; a < m.size() && !jumping; a++)
     {
-        if(m.at(a)->getGlobalBounds().left <= collision->getPosition().x
-           && m.at(a)->getGlobalBounds().left+30 >= collision->getPosition().x)
+        if(m.at(a)->getGlobalBounds().left+20 <= collision->getPosition().x
+           && m.at(a)->getGlobalBounds().left+100 >= collision->getPosition().x)
         {
             down = a;
-            time2jump = true;
+            jumping = true;
+            jumpUp = true;
+            grav = 10;
+            std::cout << "time 2 jump " << collision->getPosition().y << std::endl;
+            cjump.restart();
+            break;
         }
     }
 
-    if(time2jump && collision->getPosition().y>= 540 && collision->getPosition().y<=560)
-    {
-        flagJump = true;
-        baseJump = collision->getPosition().y;
-        cjump.restart();
-        grav = 0;
-    }
-    else if(collision->getPosition().y > 560)
-    {
-        float y = (velCar*0.2) * time.asMilliseconds();
-        y += grav;
-        grav += 0.16;
-        collision->move({0, y});
-    }
-    else if(!flagJump && !collision->getGlobalBounds().intersects(m.at(down)->getGlobalBounds()))
-    {
-        float y = (velCar*0.2) * time.asMilliseconds();
-        y += grav;
-        grav += 0.16;
-        collision->move({0, y});
-    }
-    else if(collision->getGlobalBounds().intersects(m.at(down)->getGlobalBounds()))
-    {
-        grav = 0;
-    }
 
-    if(flagJump)
+    if(jumping)
     {
-        if(collision->getPosition().y <= 260)
+        if(jumpUp)
         {
-            flagJump = false;
-            grav = 0;
+            //move up
+            //...
+            collision->move({0.f, vel * time.asMilliseconds()});
+            a_movement->movement({0.f, vel * time.asMilliseconds()});
+
+            if(collision->getPosition().y <= 300)
+            {
+                jumpUp = false;
+                jumpDown = true;
+            }
         }
-        float y = -(velCar*3) * time.asMilliseconds();
-        grav += 0.16;
-        y += grav;
-        collision->move({0, y});
+        if(jumpDown)
+        {
+            //move down
+            //...
+            collision->move({0.f, -vel * time.asMilliseconds()});
+            a_movement->movement({0.f, -vel * time.asMilliseconds()});
+
+            if(collision->getPosition().y >= 550)
+            {
+                jumpDown = false;
+                jumping = false;
+            }
+        }
     }
+
+
+    /*
+    if(cjump.getElapsedTime().asSeconds() <= 2)
+    {
+        std::cout << "jumping" << std::endl;
+        collision->move({0.f, vel * time.asMilliseconds()});
+        a_movement->movement({0.f, vel * time.asMilliseconds()});
+    }
+    */
 }
 
 bool Enemy::shoot()

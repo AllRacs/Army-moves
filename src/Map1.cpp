@@ -33,7 +33,8 @@ Map1::Map1(sf::Texture& spritesheet)
             bridges.back()->setPosition({bridges.at(a-1)->getPosition().x
                                         + bridges.at(a-1)->getGlobalBounds().width
                                         + 150, 550.f});
-            newEnemy(a);
+            if(a > 1)
+                newEnemy(0);
         }
         else
         {
@@ -87,7 +88,6 @@ void Map1::newBridge(bool fin)
                                         + bridges.at(bridges.size()-2)->getGlobalBounds().width
                                         + 150, 550.f});
         }
-
         newEnemy(0);
 
     }
@@ -115,14 +115,14 @@ void Map1::newBridge(bool fin)
 
 void Map1::newEnemy(int n)
 {
+    sf::Vector2f pos = {bridges.back()->getPosition().x + bridges.back()->getGlobalBounds().width, bridges.back()->getPosition().y};
     if(n == 0)
     {
-        sf::Vector2f pos = {bridges.back()->getPosition().x + bridges.back()->getGlobalBounds().width, bridges.back()->getPosition().y};
-        enemies.push_back(new Enemy(0, 1, pos));
+        enemies.push_back(new Enemy(*sp, 0, 1, pos));
     }
     if(n == 1)
     {
-        enemies.push_back(new Enemy(1, 1, {0.f, 0.f}));
+        enemies.push_back(new Enemy(*sp, 1, 1, pos));
     }
 }
 
@@ -178,7 +178,7 @@ void Map1::hitEnemies()
 void Map1::controlIA()
 {
 
-    if(cHeliSpawn.getElapsedTime().asSeconds() >= 3)
+    if(cHeliSpawn.getElapsedTime().asSeconds() >= 4)
     {
         newEnemy(1);
         cHeliSpawn.restart();
@@ -186,6 +186,7 @@ void Map1::controlIA()
 
     for(int a = 0; a < enemies.size(); a++)
     {
+        enemies.at(a)->update(getBridges());
         if(enemies.at(a)->getCollision()->getPosition().x >= 500 && enemies.at(a)->getCollision()->getPosition().x <= 750 && enemies.at(a)->shoot())
         {
             bullets.push_back(new Bullet(*sp, 0, 1, 4, enemies.at(a)->getCollision()->getPosition()));
@@ -194,6 +195,7 @@ void Map1::controlIA()
         {
             delete enemies.at(a);
             enemies.erase(enemies.begin()+a);
+            break;
         }
     }
     hitEnemies();

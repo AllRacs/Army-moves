@@ -1,8 +1,8 @@
 #include "Animation.h"
 
-Animation::Animation(sf::Texture& spritesheet, float nx, float ny, float nw, float nh, int nmaxx, sf::Vector2f ini, float v)
+Animation::Animation(sf::Texture& spritesheet, float nx, float ny, float nw, float nh, int nmaxx, sf::Vector2f ini, float v, int dir)
 {
-    scale = {1.006f, 1.534f};
+    scale = {dir * 1.006f, 1.534f}; //dir -1 (left) o 1 (right)
     pos = 0;
     //ctor
     x = nx;

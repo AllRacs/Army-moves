@@ -97,7 +97,6 @@ void Game::manageEvents()
                 if(event->key.code == sf::Keyboard::Q && cShootQ.restart().asSeconds() >= 0.15)
                 {
                     //shoot 1
-                    std::cout << "SHOOT Q" << std::endl;
                     if(state == 1)
                     {
                         dynamic_cast<Map1*>(*mapp)->playerShoot(0, player->getCollision()->getPosition());
@@ -106,7 +105,6 @@ void Game::manageEvents()
                 else if(event->key.code == sf::Keyboard::W && cShootW.restart().asSeconds() >= 0.15)
                 {
                     //shoot 2
-                    std::cout << "SHOOT W" << std::endl;
                     if(state == 1)
                     {
                         dynamic_cast<Map1*>(*mapp)->playerShoot(1, player->getCollision()->getPosition());

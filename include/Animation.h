@@ -7,7 +7,7 @@
 class Animation
 {
     public:
-        Animation(sf::Texture&,float,float,float,float,int,sf::Vector2f,float);
+        Animation(sf::Texture&,float,float,float,float,int,sf::Vector2f,float,int);
         virtual ~Animation();
         void update();
         void draw(sf::RenderWindow&);
@@ -19,7 +19,7 @@ class Animation
     private:
         sf::Sprite *sprite;
         sf::Clock clock;
-        int pos, x, y, w, h, nmax;
+        int pos, x, y, w, h, nmax, dir;
         float vel;
         sf::Vector2f scale;
 };

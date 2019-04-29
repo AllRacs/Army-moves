@@ -12,7 +12,7 @@
 class Enemy
 {
     public:
-        Enemy(int,int,sf::Vector2f);
+        Enemy(sf::Texture&,int,int,sf::Vector2f);
         virtual ~Enemy();
         void update(std::vector<sf::Sprite*>);
         void draw(sf::RenderWindow&);
@@ -25,14 +25,12 @@ class Enemy
     protected:
 
     private:
-        Animation *animation;
-
         sf::Vector2f position;
         Animation *a_movement;
         sf::RectangleShape *collision;
 
-        int phase, type;
-        bool flagJump;
+        int phase, type, dir;
+        bool jumping, jumpUp, jumpDown;
         float baseJump, grav;
 
         int ammo;

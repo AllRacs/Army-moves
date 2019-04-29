@@ -9,11 +9,10 @@ Player::Player(sf::Texture& spritesheet, int p)
     grav = 0;
     flagJump = false;
     baseJump = 0;
-
     if(p==1)
     {
         phase = p;
-
+        dir = 1;
         //collision
         position = {150.f, 500.f};
         collision = new sf::RectangleShape();
@@ -24,12 +23,12 @@ Player::Player(sf::Texture& spritesheet, int p)
         collision->setOrigin(collision->getGlobalBounds().width, collision->getGlobalBounds().height);
 
         //animation
-        a_movement = new Animation(spritesheet, 63, 50, 151, 82, 2, {position.x - collision->getGlobalBounds().width/2, position.y - collision->getGlobalBounds().height/2}, 0.2);
+        a_movement = new Animation(spritesheet, 63, 50, 151, 82, 2, {position.x - collision->getGlobalBounds().width/2, position.y - collision->getGlobalBounds().height/2}, 0.2, dir);
     }
     else if(p==2)
     {
         phase = p;
-
+        dir = 1;
         //collision
         position = {800.f, 200.f};
         collision = new sf::RectangleShape();
@@ -40,7 +39,7 @@ Player::Player(sf::Texture& spritesheet, int p)
         collision->setOrigin(collision->getGlobalBounds().width, collision->getGlobalBounds().height);
 
         //animation
-        a_movement = new Animation(spritesheet, 1055, 208, 144, 82, 4, {position.x - collision->getGlobalBounds().width/2, position.y - collision->getGlobalBounds().height/2}, 0.1);
+        a_movement = new Animation(spritesheet, 1055, 208, 144, 82, 4, {position.x - collision->getGlobalBounds().width/2, position.y - collision->getGlobalBounds().height/2}, 0.1, dir);
     }
 
     std::cout << "Player created" << std::endl;

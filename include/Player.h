@@ -29,11 +29,13 @@ class Player
 
         sf::RectangleShape* getCollision();
 
+        void showCollisions();
+
     protected:
 
     private:
         sf::Vector2f position;
-        Animation *a_movement;
+        Animation *a_movement, *a_forward;
         sf::RectangleShape *collision;
 
         int points, fuel, lives, dir;
@@ -42,7 +44,7 @@ class Player
         void updateFuel();
 
         int phase;
-        bool flagJump;
+        bool flagJump, fin, seeCollisions;
         float baseJump, grav;
 
         sf::Event event;

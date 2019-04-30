@@ -56,6 +56,7 @@ Remake of Army Moves MSX (phase 1 & 2) using C++ and [SFML](https://www.sfml-dev
 
 ### Controls:
  - Start directly a concrete phase: F1 for phase 1, F2 for phase 2
+ - See player and enemies colliders: F3
 
  - Phase 1:
    - Arrow keys: Up -> jump, Left -> car reverse, Right -> car forward

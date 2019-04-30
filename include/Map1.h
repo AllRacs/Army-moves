@@ -27,6 +27,8 @@ class Map1 : public Map
         std::vector<Bullet*> getBullets();
         bool getHouse(sf::RectangleShape*);
 
+        void showCollisions();
+
     protected:
 
     private:
@@ -37,7 +39,7 @@ class Map1 : public Map
         sf::Sprite *house;
         sf::Texture *sp;
 
-        bool houseEnd;
+        bool houseEnd, seeCollisions;
 
         std::vector<Enemy*> enemies;
         std::vector<Bullet*> bullets;

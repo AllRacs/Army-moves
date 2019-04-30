@@ -1,6 +1,6 @@
 #include "Enemy.h"
 
-Enemy::Enemy(sf::Texture& spritesheet, int n, int p, sf::Vector2f pos)
+Enemy::Enemy(sf::Texture& spritesheet, int n, int p, sf::Vector2f pos, bool showColl)
 {
     //ctor
 
@@ -11,6 +11,7 @@ Enemy::Enemy(sf::Texture& spritesheet, int n, int p, sf::Vector2f pos)
     jumpUp = true;
     jumpDown = false;
     grav = 0;
+    seeCollisions = showColl;
 
     float x = pos.x - 20; // X coord to spawn at almost final of a bridge
 
@@ -25,7 +26,6 @@ Enemy::Enemy(sf::Texture& spritesheet, int n, int p, sf::Vector2f pos)
         collision = new sf::RectangleShape();
         collision->setSize({100.f,100.f});
         collision->setPosition(position);
-        collision->setOrigin({50.f,50.f});
         collision->setFillColor(sf::Color::Red);
         collision->setOrigin(collision->getGlobalBounds().width, collision->getGlobalBounds().height);
 
@@ -52,7 +52,6 @@ Enemy::Enemy(sf::Texture& spritesheet, int n, int p, sf::Vector2f pos)
         collision = new sf::RectangleShape();
         collision->setSize({100.f,100.f});
         collision->setPosition(position);
-        collision->setOrigin({50.f,50.f});
         collision->setFillColor(sf::Color::Red);
         collision->setOrigin(collision->getGlobalBounds().width, collision->getGlobalBounds().height);
 
@@ -65,6 +64,21 @@ Enemy::Enemy(sf::Texture& spritesheet, int n, int p, sf::Vector2f pos)
         //jets
         std::cout << "NEW JET" << std::endl;
         ammo = 1;
+    }
+    else if(p==2 && n==3)
+    {
+        //antiaircraft
+        dir = 1;
+        std::cout << "NEW ANTI AIR" << std::endl;
+        ammo = 2;
+        collision = new sf::RectangleShape();
+        collision->setSize({10.f, 10.f});
+        collision->setPosition(pos);
+        collision->setFillColor(sf::Color::Red);
+
+        //animation
+        a_movement = new Animation(spritesheet, 74, 1084, 222, 46, 4,
+                                   {collision->getPosition().x, collision->getPosition().y}, 0.5, dir);
     }
 }
 
@@ -83,7 +97,8 @@ void Enemy::update(std::vector<sf::Sprite*> m)
 
 void Enemy::draw(sf::RenderWindow& w)
 {
-    //w.draw(*collision);
+    if(seeCollisions)
+        w.draw(*collision);
     a_movement->draw(w);
 }
 
@@ -102,10 +117,6 @@ void Enemy::controlEnemy(std::vector<sf::Sprite*> m)
     else if(type==1)
     {
         int dir = 1;
-        if(phase==2)
-        {
-            dir = -1;
-        }
 
         //heli movement
         collision->move({dir * vel * time.asMilliseconds(), 0});
@@ -114,6 +125,12 @@ void Enemy::controlEnemy(std::vector<sf::Sprite*> m)
     else if(type==2)
     {
         //jets movement
+        //...
+    }
+    else if(type==3)
+    {
+        collision->move({velAC * time.asMilliseconds(), 0});
+        a_movement->movement({velAC * time.asMilliseconds(), 0});
     }
     c.restart();
 }
@@ -184,4 +201,9 @@ bool Enemy::shoot()
 sf::RectangleShape* Enemy::getCollision()
 {
     return collision;
+}
+
+void Enemy::showCollisions()
+{
+    seeCollisions = !seeCollisions;
 }

@@ -6,6 +6,7 @@ Map1::Map1(sf::Texture& spritesheet)
     std::cout << "Map 1 created" << std::endl;
     sp = &spritesheet;
     houseEnd = false;
+    seeCollisions = false;
 
     //SETTING ENEMIES
     enemies = std::vector<Enemy*>{};
@@ -118,11 +119,11 @@ void Map1::newEnemy(int n)
     sf::Vector2f pos = {bridges.back()->getPosition().x + bridges.back()->getGlobalBounds().width, bridges.back()->getPosition().y};
     if(n == 0)
     {
-        enemies.push_back(new Enemy(*sp, 0, 1, pos));
+        enemies.push_back(new Enemy(*sp, 0, 1, pos, seeCollisions));
     }
     if(n == 1)
     {
-        enemies.push_back(new Enemy(*sp, 1, 1, pos));
+        enemies.push_back(new Enemy(*sp, 1, 1, pos, seeCollisions));
     }
 }
 
@@ -265,6 +266,15 @@ void Map1::draw(sf::RenderWindow& w)
     {
         w.draw(*house);
     }
+}
+
+void Map1::showCollisions()
+{
+    for(int a = 0; a < enemies.size(); a++)
+    {
+        enemies.at(a)->showCollisions();
+    }
+    seeCollisions = !seeCollisions;
 }
 
 std::vector<sf::Sprite*> Map1::getBridges()

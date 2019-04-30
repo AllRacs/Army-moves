@@ -20,7 +20,7 @@ HUD::HUD(sf::Texture& spritesheet, int p)
     }
     else if(p==2)
     {
-        iconplayer->setTextureRect(sf::IntRect());
+        iconplayer->setTextureRect(sf::IntRect(1330,83,150,90));
     }
 
 

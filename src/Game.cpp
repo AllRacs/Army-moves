@@ -86,6 +86,18 @@ void Game::manageEvents()
                 {
                     switchState(2);
                 }
+                else if(event->key.code == sf::Keyboard::F3)
+                {
+                    player->showCollisions();
+                    if(state == 1)
+                    {
+                        dynamic_cast<Map1*>(*mapp)->showCollisions();
+                    }
+                    else if(state == 2)
+                    {
+                        dynamic_cast<Map2*>(*mapp)->showCollisions();
+                    }
+                }
                 else if(event->key.code == sf::Keyboard::Escape)
                 {
                     window->close();
@@ -190,6 +202,28 @@ bool Game::bulletCollision()
             }
         }
     }
+    else if(state == 2)
+    {
+        int eSize = dynamic_cast<Map2*>(*mapp)->getBullets().size();
+        if(eSize > 0)
+        {
+            for(int n = 0; n < eSize; n++)
+            {
+                if(player->getCollision()->getGlobalBounds().intersects(dynamic_cast<Map2*>(*mapp)->getBullets().at(n)->getCollision()->getGlobalBounds()))
+                {
+                    dynamic_cast<Map2*>(*mapp)->destroyBullet(n);
+                    if(cDamageCD.getElapsedTime().asSeconds() >= 0.1)
+                    {
+                        player->recieveDamage();
+                        cDamageCD.restart();
+                    }
+                    res = true;
+                    break;
+                }
+            }
+        }
+    }
+
 
     return res;
 }
@@ -227,7 +261,7 @@ void Game::checkLives()
 {
     if(player->getLives() <= 0)
     {
-        switchState(state);
+        switchState(1);
     }
 }
 
@@ -259,7 +293,7 @@ void Game::update()
     else if(state == 2)
     {
         player->update(dynamic_cast<Map2*>(*mapp)->getFloor());
-        dynamic_cast<Map2*>(*mapp)->update();
+        dynamic_cast<Map2*>(*mapp)->update(player->getFuel());
     }
     hud->update(player->getFuel(), player->getPoints(), player->getLives());
 }

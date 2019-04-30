@@ -38,13 +38,13 @@ void Bullet::update()
     switch(dir)
     {
         case 1:     // dir: 1 => up and right
-            if(bullet->getPosition().y >= 100)
+            if(type == 1 && bullet->getPosition().y >= 100)
             {
-                bullet->move(vel * time.asMilliseconds(), -vel * time.asMilliseconds());
+                bullet->move(vel * time.asMilliseconds(), 0);
             }
             else
             {
-                bullet->move(vel * time.asMilliseconds(), 0);
+                bullet->move(vel * time.asMilliseconds(), -vel * time.asMilliseconds());
             }
             break;
         case 2:     //dir: 2 => right straight

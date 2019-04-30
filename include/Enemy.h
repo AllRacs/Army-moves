@@ -9,10 +9,12 @@
 #define velCar -0.4
 #define vel -0.25
 
+#define velAC 0.2 //antiaircraft vel
+
 class Enemy
 {
     public:
-        Enemy(sf::Texture&,int,int,sf::Vector2f);
+        Enemy(sf::Texture&,int,int,sf::Vector2f,bool);
         virtual ~Enemy();
         void update(std::vector<sf::Sprite*>);
         void draw(sf::RenderWindow&);
@@ -22,6 +24,8 @@ class Enemy
 
         sf::RectangleShape* getCollision();
 
+        void showCollisions();
+
     protected:
 
     private:
@@ -30,7 +34,7 @@ class Enemy
         sf::RectangleShape *collision;
 
         int phase, type, dir;
-        bool jumping, jumpUp, jumpDown;
+        bool jumping, jumpUp, jumpDown, seeCollisions;
         float baseJump, grav;
 
         int ammo;

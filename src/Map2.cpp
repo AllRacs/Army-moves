@@ -3,8 +3,18 @@
 Map2::Map2(sf::Texture& spritesheet)
 {
     //ctor
+
+    //SETTING FLOOR
     floor = std::vector<sf::Sprite*>{};
     cFloor.restart();
+
+    //SETTING ENEMIES
+    enemies = std::vector<Enemy*>{};
+
+    //SETTING BULLETS
+    bullets = std::vector<Bullet*>{};
+    pBullets = std::vector<Bullet*>{};
+
     fin = false;
     showHeliport = false;
     sp = &spritesheet;

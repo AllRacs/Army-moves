@@ -31,6 +31,7 @@ class Map2 : public Map
 
         std::vector<Enemy*> enemies;
         std::vector<Bullet*> bullets;
+        std::vector<Bullet*> pBullets;
 
         void newFloor();
         void controlFloor(int);

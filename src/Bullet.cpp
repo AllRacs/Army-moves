@@ -38,7 +38,7 @@ void Bullet::update()
     switch(dir)
     {
         case 1:     // dir: 1 => up and right
-            if(type == 1 && bullet->getPosition().y >= 100)
+            if(phase == 1 && bullet->getPosition().y <= 100)
             {
                 bullet->move(vel * time.asMilliseconds(), 0);
             }

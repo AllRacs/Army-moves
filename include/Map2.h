@@ -24,6 +24,7 @@ class Map2 : public Map
         void destroyPBullet(int);
 
         void showCollisions();
+        bool isFinal();
 
     protected:
 
@@ -32,8 +33,8 @@ class Map2 : public Map
         sf::IntRect ss_Floor;
         sf::Texture *sp;
         sf::Sprite *heliport;
-        sf::Clock cFloor, spawnAntiair, cspawnBullets;
-        bool fin, showHeliport, seeCollisions;
+        sf::Clock cFloor, spawnAntiair, spawnJet, cspawnBullets, cEnd;
+        bool fin, signalFinal, showHeliport, seeCollisions;
 
         std::vector<Enemy*> enemies;
         std::vector<Bullet*> bullets;
@@ -42,6 +43,7 @@ class Map2 : public Map
         void newFloor();
         void controlFloor(int);
         void newEnemyAC();
+        void newEnemyJet();
         void managebullets();
 };
 

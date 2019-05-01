@@ -12,6 +12,9 @@ Enemy::Enemy(sf::Texture& spritesheet, int n, int p, sf::Vector2f pos, bool show
     jumpDown = false;
     grav = 0;
     seeCollisions = showColl;
+    jetBehavior = -1;
+    jetState = 1;
+    shootSignal = false;
 
     float x = pos.x - 20; // X coord to spawn at almost final of a bridge
 
@@ -64,6 +67,33 @@ Enemy::Enemy(sf::Texture& spritesheet, int n, int p, sf::Vector2f pos, bool show
         //jets
         std::cout << "NEW JET" << std::endl;
         ammo = 1;
+        dir = 1;
+
+        srand(time(NULL));
+        int n = rand() % 3;
+        n = 1; //temp
+        if(n <= 1)
+        {
+            position = {0.f, pos.y};   //jet starts at left
+            jetBehavior = 1;
+        }
+        else
+        {
+            position = {1200.f, pos.y};   //jet starts at right
+            jetBehavior = 2;
+            dir = -1;
+        }
+
+        //collision
+        collision = new sf::RectangleShape();
+        collision->setSize({100.f,100.f});
+        collision->setPosition(position);
+        collision->setFillColor(sf::Color::Red);
+        collision->setOrigin(collision->getGlobalBounds().width, collision->getGlobalBounds().height);
+
+        //animation
+        a_movement = new Animation(spritesheet, 1372, 331, 187, 107, 1,
+                                   {position.x - collision->getGlobalBounds().width/2 + 20, position.y - collision->getGlobalBounds().height/2}, 0.2, dir);
     }
     else if(p==2 && n==3)
     {
@@ -113,7 +143,43 @@ void Enemy::controlEnemy(std::vector<sf::Sprite*> m)
     else if(type==2)
     {
         //jets movement
-        //...
+        if(jetBehavior == 1)
+        {
+            // script: 3 states -> (1) moveBshoot, (2) shoot, (3) moveAshoot
+            // if(moveBshoot) move right, else if(shoot) dont move, else if(moveAshoot) move left
+            if(jetState == 1)
+            {
+                collision->move({-dir * vel * time.asMilliseconds(), 0});
+                a_movement->movement({-dir * vel * time.asMilliseconds(), 0});
+                if(collision->getPosition().x >= 200)
+                {
+                    jetState = 2;
+                    wait2shoot.restart(); // WARNING if causes troubles move up w/ ->move calls
+                }
+            }
+            else if(jetState == 2)
+            {
+                if(wait2shoot.getElapsedTime().asSeconds() >= 1.5)
+                {
+                    //signal shoot & state 3
+                    shootSignal = true;
+                    jetState = 3;
+                    dir = 1;
+                    a_movement->changeDirection();
+                }
+            }
+            else if(jetState == 3)
+            {
+                collision->move({dir * vel * time.asMilliseconds(), 0});
+                a_movement->movement({dir * vel * time.asMilliseconds(), 0});
+            }
+        }
+        else if(jetBehavior == 2)
+        {
+            // script: 3 states -> (1) moveBshoot, (2) shoot, (3) moveAshoot
+            // if(moveBshoot) move right, else if(shoot) dont move, else if(moveAshoot) move left
+            // ...
+        }
     }
     else if(type==3)
     {
@@ -150,7 +216,6 @@ void Enemy::jump(std::vector<sf::Sprite*> m)
         if(jumpUp)
         {
             //move up
-            //...
             collision->move({0.f, (vel - 0.3) * time.asMilliseconds() * grav});
             a_movement->movement({0.f, (vel - 0.3) * time.asMilliseconds() * grav});
             grav -= 0.01;
@@ -163,7 +228,6 @@ void Enemy::jump(std::vector<sf::Sprite*> m)
         if(jumpDown)
         {
             //move down
-            //...
             collision->move({0.f, -(vel - 0.3) * time.asMilliseconds() * grav});
             a_movement->movement({0.f, -(vel - 0.3) * time.asMilliseconds() * grav});
             grav += 0.01;
@@ -179,9 +243,14 @@ void Enemy::jump(std::vector<sf::Sprite*> m)
 bool Enemy::shoot()
 {
     bool res = false;
-    if(ammo-- > 0)
+    if(type != 2 && ammo-- > 0)
     {
         res = true;
+    }
+    else if(type == 2 && ammo-- > 0)
+    {
+        res = true;
+        shootSignal = false;
     }
     return res;
 }
@@ -202,6 +271,11 @@ void Enemy::draw(sf::RenderWindow& w)
 sf::RectangleShape* Enemy::getCollision()
 {
     return collision;
+}
+
+int Enemy::getType()
+{
+    return type;
 }
 
 void Enemy::showCollisions()

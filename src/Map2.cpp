@@ -19,6 +19,7 @@ Map2::Map2(sf::Texture& spritesheet)
     showHeliport = false;
     sp = &spritesheet;
     seeCollisions = false;
+    signalFinal = false;
 
     ss_Floor = sf::IntRect(44,1222,1092,68);
     for(int a = 0; a < 2; a++)
@@ -106,12 +107,35 @@ void Map2::newEnemyAC()
     enemies.push_back(new Enemy(*sp, 3, 2, {-80.f, 625.f}, seeCollisions));
 }
 
+void Map2::newEnemyJet()
+{
+    float y = 200.f;
+    srand(time(NULL));
+    int n = rand() % 3;
+    y = y + 50 * n;
+    enemies.push_back(new Enemy(*sp, 2, 2, {100.f, y}, seeCollisions));
+}
+
 void Map2::managebullets()
 {
-    if(cspawnBullets.getElapsedTime().asSeconds() >= 1.5 && enemies.size() > 0 && enemies.back()->shoot())
+    if(cspawnBullets.getElapsedTime().asSeconds() >= 1.5)
     {
-        bullets.push_back(new Bullet(*sp, 0, 2, 1, {enemies.back()->getCollision()->getPosition()}));
-        cspawnBullets.restart();
+        for(int a = 0; a < enemies.size(); a++)
+        {
+            if(enemies.at(a)->getType() == 3 && enemies.at(a)->shoot())
+            {
+                bullets.push_back(new Bullet(*sp, 0, 2, 1, {enemies.at(a)->getCollision()->getPosition()}));
+                cspawnBullets.restart();
+            }
+        }
+    }
+    for(int a = 0; a < enemies.size(); a++)
+    {
+        if(enemies.at(a)->getType() == 2)
+        {
+            if(enemies.at(a)->getCollision()->getPosition().x <= 210 && enemies.at(a)->getCollision()->getPosition().x >= 190 && enemies.at(a)->shoot())
+                bullets.push_back(new Bullet(*sp, 0, 2, 2, {enemies.at(a)->getCollision()->getPosition().x - 10, enemies.at(a)->getCollision()->getPosition().y - 40}));
+        }
     }
     for(int a = 0; a < bullets.size(); a++)
     {
@@ -188,19 +212,25 @@ void Map2::controlIA(int fuel)
 {
     managebullets();
     hitEnemies();
-    if(fuel >= 700 )
+    if(fuel >= 700)
     {
         if(spawnAntiair.getElapsedTime().asSeconds() >= 7)
         {
             newEnemyAC();
             spawnAntiair.restart();
         }
+        if(spawnJet.getElapsedTime().asSeconds() >= 4.5)
+        {
+            newEnemyJet();
+            spawnJet.restart();
+        }
+
     }
 
     for(int a = 0; a < enemies.size(); a++)
     {
         enemies.at(a)->update(floor);
-        if(enemies.at(a)->getCollision()->getPosition().x >= 1090)
+        if(enemies.at(a)->getCollision()->getPosition().x >= 1090 || enemies.at(a)->getCollision()->getPosition().x <= -300)
         {
             delete enemies.at(a);
             enemies.erase(enemies.begin()+a);
@@ -213,6 +243,14 @@ void Map2::update(int fuel)
 {
     controlFloor(fuel);
     controlIA(fuel);
+    if(fuel > 300)
+    {
+        cEnd.restart();
+    }
+    else if(fuel == 300 && cEnd.getElapsedTime().asSeconds() >= 3)
+    {
+        signalFinal = true;
+    }
 }
 
 void Map2::draw(sf::RenderWindow& w)
@@ -261,4 +299,9 @@ std::vector<Enemy*> Map2::getEnemies()
 std::vector<Bullet*> Map2::getBullets()
 {
     return bullets;
+}
+
+bool Map2::isFinal()
+{
+    return signalFinal;
 }

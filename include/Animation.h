@@ -13,6 +13,7 @@ class Animation
         void draw(sf::RenderWindow&);
         void movement(sf::Vector2f);
         void reposition(sf::Vector2f);
+        void changeDirection();
 
     protected:
 

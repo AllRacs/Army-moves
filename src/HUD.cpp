@@ -4,6 +4,7 @@ HUD::HUD(sf::Texture& spritesheet, int p)
 {
     //ctor
 
+    phase = p;
     scale = {1.006f, 1.534f};
 
     layout.setTexture(spritesheet);
@@ -14,6 +15,7 @@ HUD::HUD(sf::Texture& spritesheet, int p)
     iconplayer = new sf::Sprite(spritesheet);
     iconplayer->setPosition({155.f,765.f});
     iconplayer->setScale(scale.x, scale.y);
+
     if(p==1)
     {
         iconplayer->setTextureRect(sf::IntRect(58,45,146,100));
@@ -52,6 +54,37 @@ HUD::HUD(sf::Texture& spritesheet, int p)
     lives->setString("LIVES");
     lives->setCharacterSize(36);
 
+    phase1start = new sf::Text;
+    phase1start->setFont(*pixelFont);
+    phase1start->setPosition(390.f, 300.f);
+    phase1start->setString("PHASE 1");
+    phase1start->setCharacterSize(40);
+
+    phase2start = new sf::Text;
+    phase2start->setFont(*pixelFont);
+    phase2start->setPosition(390.f, 300.f);
+    phase2start->setString("PHASE 2");
+    phase2start->setCharacterSize(40);
+
+    phase2end = new sf::Text;
+    phase2end->setFont(*pixelFont);
+    phase2end->setPosition(300.f, 300.f);
+    phase2end->setString("GAME OVER");
+    phase2end->setCharacterSize(70);
+
+    phase2end2 = new sf::Text;
+    phase2end2->setFont(*pixelFont);
+    phase2end2->setPosition(250.f, 400.f);
+    phase2end2->setString("Teleporting you to phase 1");
+    phase2end2->setCharacterSize(30);
+
+    pointCount = 0;
+    endPoint = new sf::Text;
+    endPoint->setFont(*pixelFont);
+    endPoint->setPosition(715.f + 10 * pointCount, 400.f);
+    endPoint->setString(".");
+    endPoint->setCharacterSize(30);
+
     std::cout << "HUD created" << std::endl;
 }
 
@@ -63,6 +96,11 @@ HUD::~HUD()
     delete points;
     delete fuel;
     delete lives;
+    delete phase1start;
+    delete phase2start;
+    delete phase2end;
+    delete phase2end2;
+    delete endPoint;
 }
 
 void HUD::update(int f, int p, int l)
@@ -70,6 +108,7 @@ void HUD::update(int f, int p, int l)
     updateFuel(f);
     updatePoints(p);
     updateLives(l);
+    updateEndPoint();
 }
 
 void HUD::updatePoints(int p)
@@ -97,6 +136,20 @@ void HUD::draw(sf::RenderWindow& w)
     w.draw(*fuel);
     w.draw(*lives);
     w.draw(*iconplayer);
+    if(phase == 1 && ifuel >= 4800)
+    {
+        w.draw(*phase1start);
+    }
+    else if(phase == 2 && ifuel >= 4800)
+    {
+        w.draw(*phase2start);
+    }
+    if(phase == 2 && ifuel == 300)
+    {
+        w.draw(*phase2end);
+        w.draw(*phase2end2);
+        w.draw(*endPoint);
+    }
 }
 
 int HUD::getPoints()
@@ -108,3 +161,30 @@ int HUD::getFuel()
 {
     return ifuel;
 }
+
+void HUD::updateEndPoint()
+{
+    if(ifuel > 300)
+    {
+        cEndPoint.restart();
+    }
+    else if(ifuel == 300 && cEndPoint.getElapsedTime().asSeconds() >= 0.33)
+    {
+        if(pointCount++ < 3)
+        {
+            endPoint->setPosition(715.f + 10 * pointCount, 400.f);
+        }
+        else
+        {
+            pointCount = 0;
+        }
+        cEndPoint.restart();
+    }
+}
+
+
+
+
+
+
+

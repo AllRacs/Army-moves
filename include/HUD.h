@@ -22,16 +22,20 @@ class HUD
         sf::Sprite *iconplayer;
 
         sf::Vector2f scale;
+        sf::Clock cEndPoint;
 
         sf::Font *pixelFont;
         sf::Text *points;
         sf::Text *fuel;
         sf::Text *lives;
-        int ipoints, ifuel, ilives;
+        sf::Text *phase1start, *phase2start;
+        sf::Text *phase2end, *phase2end2, *endPoint;
+        int ipoints, ifuel, ilives, phase, pointCount;
 
         void updateFuel(int);
         void updatePoints(int);
         void updateLives(int);
+        void updateEndPoint();
 };
 
 #endif // HUD_H

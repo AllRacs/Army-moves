@@ -106,37 +106,43 @@ void Game::manageEvents()
                 {
                     GODMODE();
                 }
-                if(event->key.code == sf::Keyboard::Q && cShootQ.restart().asSeconds() >= 0.15)
+                if(player->getFuel() > 300 && event->key.code == sf::Keyboard::Q && cShootQ.getElapsedTime().asSeconds() >= 0.3)
                 {
                     //shoot 1
                     if(state == 1)
                     {
                         dynamic_cast<Map1*>(*mapp)->playerShoot(0, player->getCollision()->getPosition());
                     }
-                    else if(state == 2)
+                    else if(state == 2 && cShootW.getElapsedTime().asSeconds() >= 0.3)
                     {
                         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
                             dynamic_cast<Map2*>(*mapp)->playerShoot(1, player->getCollision()->getPosition());
 
                         else
                             dynamic_cast<Map2*>(*mapp)->playerShoot(0, player->getCollision()->getPosition());
+
+                        cShootW.restart();
                     }
+                    cShootQ.restart();
                 }
-                else if(event->key.code == sf::Keyboard::W && cShootW.restart().asSeconds() >= 0.15)
+                else if(player->getFuel() > 300 && event->key.code == sf::Keyboard::W && cShootW.getElapsedTime().asSeconds() >= 0.3)
                 {
                     //shoot 2
                     if(state == 1)
                     {
                         dynamic_cast<Map1*>(*mapp)->playerShoot(1, player->getCollision()->getPosition());
                     }
-                    else if(state == 2)
+                    else if(state == 2 && cShootQ.getElapsedTime().asSeconds() >= 0.3)
                     {
                         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
                             dynamic_cast<Map2*>(*mapp)->playerShoot(1, player->getCollision()->getPosition());
 
                         else
                             dynamic_cast<Map2*>(*mapp)->playerShoot(0, player->getCollision()->getPosition());
+
+                        cShootQ.restart();
                     }
+                    cShootW.restart();
                 }
                 break;
 
@@ -192,6 +198,13 @@ void Game::endPhase1()
     }
 }
 
+void Game::endPhase2()
+{
+    if(state == 2 && player->getFuel() < 310 && dynamic_cast<Map2*>(*mapp)->isFinal())
+    {
+        switchState(1);
+    }
+}
 
 bool Game::bulletCollision()
 {
@@ -316,6 +329,7 @@ void Game::gameLoop()
             enemyCollision();
         }
         endPhase1();
+        endPhase2();
     }
 }
 

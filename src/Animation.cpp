@@ -1,7 +1,8 @@
 #include "Animation.h"
 
-Animation::Animation(sf::Texture& spritesheet, float nx, float ny, float nw, float nh, int nmaxx, sf::Vector2f ini, float v, int dir)
+Animation::Animation(sf::Texture& spritesheet, float nx, float ny, float nw, float nh, int nmaxx, sf::Vector2f ini, float v, int d)
 {
+    dir = d;
     scale = {dir * 1.006f, 1.534f}; //dir -1 (left) o 1 (right)
     pos = 0;
     //ctor
@@ -54,4 +55,10 @@ void Animation::movement(sf::Vector2f m)
 void Animation::reposition(sf::Vector2f v)
 {
     sprite->setPosition(v);
+}
+
+void Animation::changeDirection()
+{
+    scale = {-dir * 1.006f, 1.534f};
+    sprite->setScale(scale);
 }

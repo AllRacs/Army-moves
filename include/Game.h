@@ -45,6 +45,7 @@ class Game
         void manageEvents();
         void switchState(int);
         void endPhase1();
+        void endPhase2();
 
         //player & enemy logic
         bool bulletCollision();

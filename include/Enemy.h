@@ -24,6 +24,7 @@ class Enemy
 
         sf::RectangleShape* getCollision();
 
+        int getType();
         void showCollisions();
 
     protected:
@@ -33,13 +34,13 @@ class Enemy
         Animation *a_movement;
         sf::RectangleShape *collision;
 
-        int phase, type, dir;
-        bool jumping, jumpUp, jumpDown, seeCollisions;
+        int phase, type, dir, jetBehavior, jetState;
+        bool jumping, jumpUp, jumpDown, seeCollisions, shootSignal;
         float baseJump, grav;
 
         int ammo;
-
-        sf::Clock c, cjump;
+        // for move, for cars, for jets
+        sf::Clock c, cjump, wait2shoot;
 
 };
 

@@ -30,6 +30,7 @@ class Player
         sf::RectangleShape* getCollision();
 
         void showCollisions();
+        void changeGodMode(bool);
 
     protected:
 
@@ -44,7 +45,7 @@ class Player
         void updateFuel();
 
         int phase;
-        bool flagJump, fin, seeCollisions;
+        bool flagJump, fin, seeCollisions, godMode;
         float baseJump, grav;
 
         sf::Event event;

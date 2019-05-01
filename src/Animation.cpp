@@ -59,6 +59,7 @@ void Animation::reposition(sf::Vector2f v)
 
 void Animation::changeDirection()
 {
-    scale = {-dir * 1.006f, 1.534f};
+    dir = -dir;
+    scale = {dir * 1.006f, 1.534f};
     sprite->setScale(scale);
 }

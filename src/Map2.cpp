@@ -112,7 +112,7 @@ void Map2::newEnemyJet()
     float y = 200.f;
     srand(time(NULL));
     int n = rand() % 3;
-    y = y + 50 * n;
+    y = y + 80 * n;
     enemies.push_back(new Enemy(*sp, 2, 2, {100.f, y}, seeCollisions));
 }
 
@@ -230,7 +230,13 @@ void Map2::controlIA(int fuel)
     for(int a = 0; a < enemies.size(); a++)
     {
         enemies.at(a)->update(floor);
-        if(enemies.at(a)->getCollision()->getPosition().x >= 1090 || enemies.at(a)->getCollision()->getPosition().x <= -300)
+        if(enemies.at(a)->getType() == 2 && enemies.at(a)->getCollision()->getPosition().x <= -300)
+        {
+            delete enemies.at(a);
+            enemies.erase(enemies.begin()+a);
+            break;
+        }
+        if(enemies.at(a)->getType() == 3 && enemies.at(a)->getCollision()->getPosition().x >= 1090)
         {
             delete enemies.at(a);
             enemies.erase(enemies.begin()+a);

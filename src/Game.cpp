@@ -52,6 +52,7 @@ void Game::initGame(int s)
             break;
     }
     initPlayer();
+    hud->changeGodMode(godMode);
 }
 
 void Game::initMap1()
@@ -69,6 +70,7 @@ void Game::initMap2()
 void Game::initPlayer()
 {
     player = new Player(*spritesheet, state);
+    player->changeGodMode(godMode);
 }
 
 void Game::manageEvents()
@@ -98,6 +100,10 @@ void Game::manageEvents()
                         dynamic_cast<Map2*>(*mapp)->showCollisions();
                     }
                 }
+                else if(event->key.code == sf::Keyboard::F4)
+                {
+                    hud->showInfo();
+                }
                 else if(event->key.code == sf::Keyboard::Escape)
                 {
                     window->close();
@@ -105,6 +111,8 @@ void Game::manageEvents()
                 else if(event->key.code == sf::Keyboard::G)
                 {
                     GODMODE();
+                    hud->changeGodMode(godMode);
+                    player->changeGodMode(godMode);
                 }
                 if(player->getFuel() > 300 && event->key.code == sf::Keyboard::Q && cShootQ.getElapsedTime().asSeconds() >= 0.3)
                 {

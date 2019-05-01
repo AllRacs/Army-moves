@@ -10,6 +10,7 @@ Player::Player(sf::Texture& spritesheet, int p)
     flagJump = false;
     fin = false;
     seeCollisions = false;
+    godMode = false;
     baseJump = 0;
     if(p==1)
     {
@@ -114,9 +115,6 @@ void Player::jump(std::vector<sf::Sprite*> m)
             down = a;
         }
     }
-
-    //std::cout << collision->getPosition().y << std::endl;
-
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && collision->getPosition().y>= 540 && collision->getPosition().y<=560)
     {
         flagJump = true;
@@ -129,7 +127,6 @@ void Player::jump(std::vector<sf::Sprite*> m)
         float y = (vel*0.2) * time.asMilliseconds();
         y += grav;
         grav += 0.16;
-        //std::cout << grav << std::endl;
         collision->move({0, y});
         a_movement->movement({0, y});
         if(phase==2)
@@ -140,7 +137,6 @@ void Player::jump(std::vector<sf::Sprite*> m)
         float y = (vel*0.2) * time.asMilliseconds();
         y += grav;
         grav += 0.16;
-        //std::cout << grav << std::endl;
         collision->move({0, y});
         a_movement->movement({0, y});
         if(phase==2)
@@ -173,8 +169,6 @@ void Player::reposition()
     grav = 0;
 
     //select best position to respawn
-    // sf::Vector2f v ...
-
     sf::Vector2f v;
     if(phase==1)
         v = {150.f,300.f};
@@ -193,7 +187,8 @@ void Player::reposition()
 void Player::recieveDamage()
 {
     reposition();
-    lives--;
+    if(!godMode)
+        lives--;
 }
 
 void Player::updatePoints()
@@ -251,6 +246,11 @@ void Player::draw(sf::RenderWindow& w)
     {
         a_movement->draw(w);
     }
+}
+
+void Player::changeGodMode(bool g)
+{
+    godMode = g;
 }
 
 void Player::showCollisions()

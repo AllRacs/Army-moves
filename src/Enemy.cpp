@@ -65,21 +65,20 @@ Enemy::Enemy(sf::Texture& spritesheet, int n, int p, sf::Vector2f pos, bool show
     else if(p==2 && n==2)
     {
         //jets
-        std::cout << "NEW JET" << std::endl;
+        //std::cout << "NEW JET" << std::endl;
         ammo = 1;
         dir = 1;
 
         srand(time(NULL));
-        int n = rand() % 3;
-        n = 1; //temp
-        if(n <= 1)
+        int n = rand() % 2;
+        if(n < 1)
         {
             position = {0.f, pos.y};   //jet starts at left
             jetBehavior = 1;
         }
         else
         {
-            position = {1200.f, pos.y};   //jet starts at right
+            position = {1100.f, pos.y};   //jet starts at right
             jetBehavior = 2;
             dir = -1;
         }
@@ -99,7 +98,7 @@ Enemy::Enemy(sf::Texture& spritesheet, int n, int p, sf::Vector2f pos, bool show
     {
         //antiaircraft
         dir = 1;
-        std::cout << "NEW ANTI AIR" << std::endl;
+        //std::cout << "NEW ANTI AIR" << std::endl;
         ammo = 2;
         collision = new sf::RectangleShape();
         collision->setSize({160.f, 70.f});
@@ -178,7 +177,33 @@ void Enemy::controlEnemy(std::vector<sf::Sprite*> m)
         {
             // script: 3 states -> (1) moveBshoot, (2) shoot, (3) moveAshoot
             // if(moveBshoot) move right, else if(shoot) dont move, else if(moveAshoot) move left
-            // ...
+            if(jetState == 1)
+            {
+                collision->move({-dir * vel * time.asMilliseconds(), 0});
+                a_movement->movement({-dir * vel * time.asMilliseconds(), 0});
+                if(collision->getPosition().x <= 200)
+                {
+                    jetState = 2;
+                    a_movement->changeDirection();
+                    wait2shoot.restart(); // WARNING if causes troubles move up w/ ->move calls
+                }
+            }
+            else if(jetState == 2)
+            {
+                if(wait2shoot.getElapsedTime().asSeconds() >= 1.5)
+                {
+                    //signal shoot & state 3
+                    a_movement->changeDirection();
+                    shootSignal = true;
+                    jetState = 3;
+                    dir = 1;
+                }
+            }
+            else if(jetState == 3)
+            {
+                collision->move({dir * vel * time.asMilliseconds(), 0});
+                a_movement->movement({dir * vel * time.asMilliseconds(), 0});
+            }
         }
     }
     else if(type==3)
@@ -204,7 +229,6 @@ void Enemy::jump(std::vector<sf::Sprite*> m)
             jumping = true;
             jumpUp = true;
             grav = 1;
-            std::cout << "time 2 jump " << collision->getPosition().y << std::endl;
             cjump.restart();
             break;
         }

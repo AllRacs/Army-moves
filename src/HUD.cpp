@@ -6,6 +6,7 @@ HUD::HUD(sf::Texture& spritesheet, int p)
 
     phase = p;
     scale = {1.006f, 1.534f};
+    godMode = false;
 
     layout.setTexture(spritesheet);
     layout.setTextureRect(sf::IntRect(1430,862,1010,666));
@@ -35,6 +36,19 @@ HUD::HUD(sf::Texture& spritesheet, int p)
     ipoints = 0;
     ifuel = 0;
     ilives = 0;
+
+    toogleInfo = false;
+    info = new sf::Text;
+    info->setFont(*pixelFont);
+    info->setPosition(30.f, 45.f);
+    info->setString("F4: SHOW INFO (TOGGLE) -- GODMODE (G): OFF");
+    info->setCharacterSize(17);
+
+    controls = new sf::Text;
+    controls->setFont(*pixelFont);
+    controls->setPosition(30.f, 65.f);
+    controls->setString("CONTROLS-> Q/W: SHOOT - ARROWS L/R: MOVE - ARROW UP (CAR): JUMP - ARROW U/P (HELI): MOVE");
+    controls->setCharacterSize(17);
 
     points = new sf::Text;
     points->setFont(*pixelFont);
@@ -94,6 +108,8 @@ HUD::~HUD()
     delete iconplayer;
     delete pixelFont;
     delete points;
+    delete info;
+    delete controls;
     delete fuel;
     delete lives;
     delete phase1start;
@@ -132,6 +148,10 @@ void HUD::updateLives(int l)
 void HUD::draw(sf::RenderWindow& w)
 {
     w.draw(layout);
+    w.draw(*info);
+    if(toogleInfo)
+        w.draw(*controls);
+
     w.draw(*points);
     w.draw(*fuel);
     w.draw(*lives);
@@ -182,9 +202,41 @@ void HUD::updateEndPoint()
     }
 }
 
+void HUD::showInfo()
+{
+    toogleInfo = !toogleInfo;
+    if(!toogleInfo)
+    {
+        if(!godMode)
+            info->setString("F4: SHOW INFO (TOGGLE)");
+        else
+            info->setString("F4: SHOW INFO (TOGGLE) -- GODMODE: ON");
+    }
+    else
+    {
+        changeGodMode(godMode);
+    }
+}
 
-
-
-
-
-
+void HUD::changeGodMode(bool god)
+{
+    godMode = god;
+    if(toogleInfo)
+    {
+        if(god)
+        {
+            info->setString("GODMODE (G): ON - F1: RESTART PHASE 1 - F2: RESTART PHASE 2 - F3: SHOW COLLIDERS");
+        }
+        else
+        {
+            info->setString("GODMODE (G): OFF - F1: RESTART PHASE 1 - F2: RESTART PHASE 2 - F3: SHOW COLLIDERS");
+        }
+    }
+    else
+    {
+        if(!godMode)
+            info->setString("F4: SHOW INFO (TOGGLE) -- GODMODE (G): OFF");
+        else
+            info->setString("F4: SHOW INFO (TOGGLE) -- GODMODE (G): ON");
+    }
+}

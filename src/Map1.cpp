@@ -39,12 +39,9 @@ Map1::Map1(sf::Texture& spritesheet)
         }
         else
         {
-            std::cout << "first bridge" << std::endl;
             bridges.back()->setPosition({100.f, 550.f});
         }
-        //std::cout << bridges.at(a)->getPosition().x << " --- " << bridges.at(a)->getGlobalBounds().width << std::endl;
     }
-
 }
 
 Map1::~Map1()
@@ -227,7 +224,6 @@ void Map1::update(int fuel, std::vector<sf::Sprite*> m)
     else if(!houseEnd && fuel < 2000)
     {
         newBridge(true);
-        std::cout << bridges.size() << std::endl;
     }
 
     for(int a = 0; a < enemies.size(); a++)

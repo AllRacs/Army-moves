@@ -106,7 +106,7 @@ void Map2::newEnemyAC()
     enemies.push_back(new Enemy(*sp, 3, 2, {-80.f, 625.f}, seeCollisions));
 }
 
-void Map2::manageACbullets()
+void Map2::managebullets()
 {
     if(cspawnBullets.getElapsedTime().asSeconds() >= 1.5 && enemies.size() > 0 && enemies.back()->shoot())
     {
@@ -122,6 +122,15 @@ void Map2::manageACbullets()
             bullets.erase(bullets.begin()+a);
         }
     }
+    for(int a = 0; a < pBullets.size(); a++)
+    {
+        pBullets.at(a)->update();
+        if(pBullets.at(a)->getCollision()->getPosition().x <= 0 || pBullets.at(a)->getCollision()->getPosition().y >= 600)
+        {
+            delete pBullets.at(a);
+            pBullets.erase(pBullets.begin()+a);
+        }
+    }
 }
 
 void Map2::destroyBullet(int n)
@@ -130,9 +139,55 @@ void Map2::destroyBullet(int n)
     bullets.erase(bullets.begin()+n);
 }
 
+void Map2::destroyEnemy(int n)
+{
+    delete enemies.at(n);
+    enemies.erase(enemies.begin()+n);
+}
+
+void Map2::destroyPBullet(int n)
+{
+    delete pBullets.at(n);
+    pBullets.erase(pBullets.begin()+n);
+}
+
+void Map2::playerShoot(int n, sf::Vector2f playerPos)
+{
+    if(n==0)
+    {
+        //normal shoot (forward and down)
+        pBullets.push_back(new Bullet(*sp, 1, 1, 5, {playerPos.x - 80, playerPos.y - 80}));
+        pBullets.push_back(new Bullet(*sp, 1, 1, 3, {playerPos.x - 10, playerPos.y - 80}));
+    }
+    else if(n==1)
+    {
+        //if heli forwarding
+        pBullets.push_back(new Bullet(*sp, 1, 1, 4, {playerPos.x - 80, playerPos.y - 60}));
+        pBullets.push_back(new Bullet(*sp, 1, 1, 3, {playerPos.x - 10, playerPos.y - 80}));
+    }
+}
+
+void Map2::hitEnemies()
+{
+    //if a pBullet intersects with some enemy --> destroyEnemy(n) and destroyPBullet(m)
+    for(int a = 0; a < pBullets.size(); a++)
+    {
+        for(int b = 0; b < enemies.size(); b++)
+        {
+            if(pBullets.at(a)->getCollision()->getGlobalBounds().intersects(enemies.at(b)->getCollision()->getGlobalBounds()))
+            {
+                destroyPBullet(a);
+                destroyEnemy(b);
+                break;break;
+            }
+        }
+    }
+}
+
 void Map2::controlIA(int fuel)
 {
-    manageACbullets();
+    managebullets();
+    hitEnemies();
     if(fuel >= 700 )
     {
         if(spawnAntiair.getElapsedTime().asSeconds() >= 7)
@@ -173,6 +228,10 @@ void Map2::draw(sf::RenderWindow& w)
     for(int a = 0; a < bullets.size(); a++)
     {
         bullets.at(a)->draw(w);
+    }
+    for(int a = 0; a < pBullets.size(); a++)
+    {
+        pBullets.at(a)->draw(w);
     }
     if(showHeliport)
     {

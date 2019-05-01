@@ -34,9 +34,9 @@ Player::Player(sf::Texture& spritesheet, int p)
         //collision
         position = {800.f, 200.f};
         collision = new sf::RectangleShape();
-        collision->setSize({100.f,100.f});
+        collision->setSize({80.f,80.f});
         collision->setPosition(position);
-        collision->setOrigin({50.f,50.f});
+        collision->setOrigin({40.f,0.f});
         collision->setFillColor(sf::Color::Red);
         collision->setOrigin(collision->getGlobalBounds().width, collision->getGlobalBounds().height);
 
@@ -183,7 +183,10 @@ void Player::reposition()
 
     a_movement->reposition({v.x - collision->getGlobalBounds().width/2, v.y - collision->getGlobalBounds().height/2});
     if(phase==2)
-            a_forward->reposition({v.x - collision->getGlobalBounds().width/2, v.y - collision->getGlobalBounds().height/2});
+    {
+        a_movement->reposition({v.x - collision->getGlobalBounds().width/3 + 5, v.y - collision->getGlobalBounds().height/2});
+        a_forward->reposition({v.x - collision->getGlobalBounds().width/3 + 5, v.y - collision->getGlobalBounds().height/2});
+    }
     collision->setPosition(v);
 }
 

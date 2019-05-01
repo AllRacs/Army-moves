@@ -113,6 +113,14 @@ void Game::manageEvents()
                     {
                         dynamic_cast<Map1*>(*mapp)->playerShoot(0, player->getCollision()->getPosition());
                     }
+                    else if(state == 2)
+                    {
+                        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+                            dynamic_cast<Map2*>(*mapp)->playerShoot(1, player->getCollision()->getPosition());
+
+                        else
+                            dynamic_cast<Map2*>(*mapp)->playerShoot(0, player->getCollision()->getPosition());
+                    }
                 }
                 else if(event->key.code == sf::Keyboard::W && cShootW.restart().asSeconds() >= 0.15)
                 {
@@ -120,6 +128,14 @@ void Game::manageEvents()
                     if(state == 1)
                     {
                         dynamic_cast<Map1*>(*mapp)->playerShoot(1, player->getCollision()->getPosition());
+                    }
+                    else if(state == 2)
+                    {
+                        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+                            dynamic_cast<Map2*>(*mapp)->playerShoot(1, player->getCollision()->getPosition());
+
+                        else
+                            dynamic_cast<Map2*>(*mapp)->playerShoot(0, player->getCollision()->getPosition());
                     }
                 }
                 break;
@@ -242,6 +258,27 @@ bool Game::enemyCollision()
                 if(player->getCollision()->getGlobalBounds().intersects(dynamic_cast<Map1*>(*mapp)->getEnemies().at(n)->getCollision()->getGlobalBounds()))
                 {
                     dynamic_cast<Map1*>(*mapp)->destroyEnemy(n);
+                    if(cDamageCD.getElapsedTime().asSeconds() >= 0.1)
+                    {
+                        player->recieveDamage();
+                        cDamageCD.restart();
+                    }
+                    res = true;
+                    break;
+                }
+            }
+        }
+    }
+    else if(state == 2)
+    {
+        int eSize = dynamic_cast<Map2*>(*mapp)->getEnemies().size();
+        if(eSize > 0)
+        {
+            for(int n = 0; n < eSize; n++)
+            {
+                if(player->getCollision()->getGlobalBounds().intersects(dynamic_cast<Map2*>(*mapp)->getEnemies().at(n)->getCollision()->getGlobalBounds()))
+                {
+                    dynamic_cast<Map2*>(*mapp)->destroyEnemy(n);
                     if(cDamageCD.getElapsedTime().asSeconds() >= 0.1)
                     {
                         player->recieveDamage();

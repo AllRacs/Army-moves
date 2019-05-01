@@ -13,9 +13,15 @@ class Map2 : public Map
         void draw(sf::RenderWindow&);
         void controlIA(int);
         void destroyBullet(int);
+        void destroyEnemy(int);
+
         std::vector<sf::Sprite*> getFloor();
         std::vector<Enemy*> getEnemies();
         std::vector<Bullet*> getBullets();
+
+        void playerShoot(int,sf::Vector2f);
+        void hitEnemies();
+        void destroyPBullet(int);
 
         void showCollisions();
 
@@ -36,7 +42,7 @@ class Map2 : public Map
         void newFloor();
         void controlFloor(int);
         void newEnemyAC();
-        void manageACbullets();
+        void managebullets();
 };
 
 #endif // MAP2_H

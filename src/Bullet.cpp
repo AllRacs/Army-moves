@@ -6,9 +6,13 @@ Bullet::Bullet(sf::Texture& spritesheet,int n, int p, int d, sf::Vector2f pos)
     type = n; //sprite: bullet (0) or rocket (1)
     phase = p;
     dir = d;
-
+    int revers = 1;
+    if(dir == 3 || dir == 4 || dir == 5)
+    {
+        revers = -1;
+    }
     bullet = new sf::Sprite(spritesheet);
-    scale = {1.006f, 1.534f};
+    scale = {revers * 1.006f, 1.534f};
     bullet->setScale({scale.x, scale.y});
     if(n == 0)
     {
@@ -54,7 +58,7 @@ void Bullet::update()
             bullet->move(0, vel * 3/4 * time.asMilliseconds());
             break;
         case 4:     //dir: 4 => left and down
-            bullet->move(-vel * time.asMilliseconds(), vel * 2/4 * time.asMilliseconds());
+            bullet->move(-vel * time.asMilliseconds(), vel * 3/4 * time.asMilliseconds());
             break;
         case 5:     //dir: 5 => straight left
             bullet->move(-vel * time.asMilliseconds(), 0);

@@ -72,7 +72,8 @@ Enemy::Enemy(sf::Texture& spritesheet, int n, int p, sf::Vector2f pos, bool show
         std::cout << "NEW ANTI AIR" << std::endl;
         ammo = 2;
         collision = new sf::RectangleShape();
-        collision->setSize({10.f, 10.f});
+        collision->setSize({160.f, 70.f});
+        collision->setOrigin({80.f, 30.f});
         collision->setPosition(pos);
         collision->setFillColor(sf::Color::Red);
 
@@ -87,19 +88,6 @@ Enemy::~Enemy()
     //dtor
     delete collision;
     delete a_movement;
-}
-
-void Enemy::update(std::vector<sf::Sprite*> m)
-{
-    controlEnemy(m);
-    a_movement->update();
-}
-
-void Enemy::draw(sf::RenderWindow& w)
-{
-    if(seeCollisions)
-        w.draw(*collision);
-    a_movement->draw(w);
 }
 
 void Enemy::controlEnemy(std::vector<sf::Sprite*> m)
@@ -196,6 +184,19 @@ bool Enemy::shoot()
         res = true;
     }
     return res;
+}
+
+void Enemy::update(std::vector<sf::Sprite*> m)
+{
+    controlEnemy(m);
+    a_movement->update();
+}
+
+void Enemy::draw(sf::RenderWindow& w)
+{
+    if(seeCollisions)
+        w.draw(*collision);
+    a_movement->draw(w);
 }
 
 sf::RectangleShape* Enemy::getCollision()

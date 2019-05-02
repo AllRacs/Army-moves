@@ -1,4 +1,5 @@
-# Army Moves MSX
+# Army Moves MSX 
+[![CircleCI](https://circleci.com/gh/AllRacs/Army-moves/tree/master.svg?style=svg)](https://circleci.com/gh/AllRacs/Army-moves/tree/master)
 
 Remake of Army Moves MSX (phase 1 & 2) using C++ and [SFML](https://www.sfml-dev.org/) library.
 

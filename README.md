@@ -55,8 +55,9 @@ Remake of Army Moves MSX (phase 1 & 2) using C++ and [SFML](https://www.sfml-dev
 ---
 
 ### Controls:
- - Start directly a concrete phase: F1 for phase 1, F2 for phase 2
- - See player and enemies colliders: F3
+ - Start directly a concrete phase: **F1** for phase 1, **F2** for phase 2
+ - See player and enemies colliders: **F3**
+ - Toggle info panel: **F4**
  - Q: exit game
 
  - Phase 1:

@@ -1,5 +1,4 @@
 # Army Moves MSX 
-[![CircleCI](https://circleci.com/gh/AllRacs/Army-moves/tree/master.svg?style=svg)](https://circleci.com/gh/AllRacs/Army-moves/tree/master)
 
 Remake of Army Moves MSX (phase 1 & 2) using C++ and [SFML](https://www.sfml-dev.org/) library.
 
@@ -65,6 +64,6 @@ Remake of Army Moves MSX (phase 1 & 2) using C++ and [SFML](https://www.sfml-dev
 
  - Phase 2:
    - Arrow keys: Up, Down, Left, Right -> move helicopter
-   - Q -> shoot straight and below at the same time
+   - Q/W -> shoot straight and below at the same time
 
 

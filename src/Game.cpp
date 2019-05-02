@@ -104,7 +104,7 @@ void Game::manageEvents()
                 {
                     hud->showInfo();
                 }
-                else if(event->key.code == sf::Keyboard::Escape)
+                else if(event->key.code == sf::Keyboard::Q)
                 {
                     window->close();
                 }
@@ -114,7 +114,7 @@ void Game::manageEvents()
                     hud->changeGodMode(godMode);
                     player->changeGodMode(godMode);
                 }
-                if(player->getFuel() > 300 && event->key.code == sf::Keyboard::Q && cShootQ.getElapsedTime().asSeconds() >= 0.3)
+                if(player->getFuel() > 300 && event->key.code == sf::Keyboard::Z && cShootQ.getElapsedTime().asSeconds() >= 0.3)
                 {
                     //shoot 1
                     if(state == 1)
@@ -133,7 +133,7 @@ void Game::manageEvents()
                     }
                     cShootQ.restart();
                 }
-                else if(player->getFuel() > 300 && event->key.code == sf::Keyboard::W && cShootW.getElapsedTime().asSeconds() >= 0.3)
+                else if(player->getFuel() > 300 && event->key.code == sf::Keyboard::X && cShootW.getElapsedTime().asSeconds() >= 0.3)
                 {
                     //shoot 2
                     if(state == 1)

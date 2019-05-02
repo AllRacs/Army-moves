@@ -1,4 +1,4 @@
-# Army Moves MSX 
+# Army Moves MSX
 
 Remake of Army Moves MSX (phase 1 & 2) using C++ and [SFML](https://www.sfml-dev.org/) library.
 
@@ -57,13 +57,12 @@ Remake of Army Moves MSX (phase 1 & 2) using C++ and [SFML](https://www.sfml-dev
 ### Controls:
  - Start directly a concrete phase: F1 for phase 1, F2 for phase 2
  - See player and enemies colliders: F3
+ - Q: exit game
 
  - Phase 1:
    - Arrow keys: Up -> jump, Left -> car reverse, Right -> car forward
-   - Q -> shoot above, W -> shoot straight
+   - Z -> shoot above, X -> shoot straight
 
  - Phase 2:
    - Arrow keys: Up, Down, Left, Right -> move helicopter
-   - Q/W -> shoot straight and below at the same time
-
-
+   - Z/X -> shoot straight and below at the same time

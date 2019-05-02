@@ -47,7 +47,7 @@ HUD::HUD(sf::Texture& spritesheet, int p)
     controls = new sf::Text;
     controls->setFont(*pixelFont);
     controls->setPosition(30.f, 65.f);
-    controls->setString("CONTROLS-> Q/W: SHOOT - ARROWS L/R: MOVE - ARROW UP (CAR): JUMP - ARROW U/P (HELI): MOVE");
+    controls->setString("CONTROLS-> Z/X: SHOOT - ARROWS L/R: MOVE - ARROW UP (CAR): JUMP - ARROW U/P (HELI): MOVE");
     controls->setCharacterSize(17);
 
     points = new sf::Text;
